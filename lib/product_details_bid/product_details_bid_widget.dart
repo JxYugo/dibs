@@ -1167,63 +1167,9 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                             if ((productDetailsBidProductsRecord.currentBid >
                                     _model.bidAmount) ||
                                 (productDetailsBidProductsRecord.price <
+                                    _model.bidAmount) ||
+                                (productDetailsBidProductsRecord.currentBid ==
                                     _model.bidAmount)) {
-                              if (productDetailsBidProductsRecord.currentBid ==
-                                  _model.bidAmount) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Invalid bid offer',
-                                      style: TextStyle(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                      ),
-                                    ),
-                                    duration: Duration(milliseconds: 4000),
-                                    backgroundColor:
-                                        FlutterFlowTheme.of(context).secondary,
-                                  ),
-                                );
-                              } else {
-                                if (productDetailsBidProductsRecord.price ==
-                                    _model.bidAmount) {
-                                  await BidsWonRecord.createDoc(
-                                          currentUserReference!)
-                                      .set({
-                                    ...createBidsWonRecordData(
-                                      productName:
-                                          productDetailsBidProductsRecord.name,
-                                      price:
-                                          productDetailsBidProductsRecord.price,
-                                      vendor: productDetailsBidProductsRecord
-                                          .sellerId,
-                                    ),
-                                    ...mapToFirestore(
-                                      {
-                                        'added_at':
-                                            FieldValue.serverTimestamp(),
-                                        'product_images': [
-                                          productDetailsBidProductsRecord
-                                              .images.firstOrNull
-                                        ],
-                                      },
-                                    ),
-                                  });
-
-                                  context.pushNamed(BiddingWidget.routeName);
-                                } else {
-                                  await widget.productReference!
-                                      .update(createProductsRecordData(
-                                    currentBidder: valueOrDefault(
-                                        currentUserDocument?.fullname, ''),
-                                    currentBid: double.tryParse(
-                                        _model.textController.text),
-                                  ));
-
-                                  context.pushNamed(BiddingWidget.routeName);
-                                }
-                              }
-                            } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -1238,6 +1184,43 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                       FlutterFlowTheme.of(context).secondary,
                                 ),
                               );
+                            } else {
+                              if (productDetailsBidProductsRecord.price ==
+                                  _model.bidAmount) {
+                                await BidsWonRecord.createDoc(
+                                        currentUserReference!)
+                                    .set({
+                                  ...createBidsWonRecordData(
+                                    productName:
+                                        productDetailsBidProductsRecord.name,
+                                    price:
+                                        productDetailsBidProductsRecord.price,
+                                    vendor: productDetailsBidProductsRecord
+                                        .sellerId,
+                                  ),
+                                  ...mapToFirestore(
+                                    {
+                                      'added_at': FieldValue.serverTimestamp(),
+                                      'product_images': [
+                                        productDetailsBidProductsRecord
+                                            .images.firstOrNull
+                                      ],
+                                    },
+                                  ),
+                                });
+
+                                context.pushNamed(BiddingWidget.routeName);
+                              } else {
+                                await widget.productReference!
+                                    .update(createProductsRecordData(
+                                  currentBidder: valueOrDefault(
+                                      currentUserDocument?.fullname, ''),
+                                  currentBid: double.tryParse(
+                                      _model.textController.text),
+                                ));
+
+                                context.pushNamed(BiddingWidget.routeName);
+                              }
                             }
                           },
                           text: 'Add Offer',
