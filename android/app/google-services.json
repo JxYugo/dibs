@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "748236194967",
+    "project_id": "dibs-ralmlq",
+    "storage_bucket": "dibs-ralmlq.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748236194967:android:4d97b1281f19bbb22b15d2",
+        "android_client_info": {
+          "package_name": "com.mycompany.dibs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXBPufwaduRmxB8XryTRNHkvCenZ2P4hE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
