@@ -1,8 +1,10 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/index.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -589,6 +591,73 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                     ],
                                   ),
                                 ),
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        6.0, 0.0, 0.0, 0.0),
+                                    child: Text(
+                                      'Current Bidder: ',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            font: GoogleFonts.nunito(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        6.0, 0.0, 0.0, 0.0),
+                                    child: Text(
+                                      productDetailsBidProductsRecord
+                                          .currentBidder,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            font: GoogleFonts.nunito(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ),
                                 Divider(
                                   thickness: 1.0,
                                   color: Color(0x1A000000),
@@ -1091,8 +1160,85 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(
                             24.0, 0.0, 24.0, 0.0),
                         child: FFButtonWidget(
-                          onPressed: () {
-                            print('Button pressed ...');
+                          onPressed: () async {
+                            _model.bidAmount =
+                                double.parse(_model.textController.text);
+                            safeSetState(() {});
+                            if ((productDetailsBidProductsRecord.currentBid >
+                                    _model.bidAmount) ||
+                                (productDetailsBidProductsRecord.price <
+                                    _model.bidAmount)) {
+                              if (productDetailsBidProductsRecord.currentBid ==
+                                  _model.bidAmount) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Invalid bid offer',
+                                      style: TextStyle(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 4000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).secondary,
+                                  ),
+                                );
+                              } else {
+                                if (productDetailsBidProductsRecord.price ==
+                                    _model.bidAmount) {
+                                  await BidsWonRecord.createDoc(
+                                          currentUserReference!)
+                                      .set({
+                                    ...createBidsWonRecordData(
+                                      productName:
+                                          productDetailsBidProductsRecord.name,
+                                      price:
+                                          productDetailsBidProductsRecord.price,
+                                      vendor: productDetailsBidProductsRecord
+                                          .sellerId,
+                                    ),
+                                    ...mapToFirestore(
+                                      {
+                                        'added_at':
+                                            FieldValue.serverTimestamp(),
+                                        'product_images': [
+                                          productDetailsBidProductsRecord
+                                              .images.firstOrNull
+                                        ],
+                                      },
+                                    ),
+                                  });
+
+                                  context.pushNamed(BiddingWidget.routeName);
+                                } else {
+                                  await widget.productReference!
+                                      .update(createProductsRecordData(
+                                    currentBidder: valueOrDefault(
+                                        currentUserDocument?.fullname, ''),
+                                    currentBid: double.tryParse(
+                                        _model.textController.text),
+                                  ));
+
+                                  context.pushNamed(BiddingWidget.routeName);
+                                }
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Invalid bid offer',
+                                    style: TextStyle(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(milliseconds: 4000),
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).secondary,
+                                ),
+                              );
+                            }
                           },
                           text: 'Add Offer',
                           options: FFButtonOptions(

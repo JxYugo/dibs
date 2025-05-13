@@ -61,11 +61,6 @@ class ProductsRecord extends FirestoreRecord {
   String get category => _category ?? '';
   bool hasCategory() => _category != null;
 
-  // "starting_price" field.
-  double? _startingPrice;
-  double get startingPrice => _startingPrice ?? 0.0;
-  bool hasStartingPrice() => _startingPrice != null;
-
   // "current_bid" field.
   double? _currentBid;
   double get currentBid => _currentBid ?? 0.0;
@@ -121,6 +116,11 @@ class ProductsRecord extends FirestoreRecord {
   bool get isBidding => _isBidding ?? false;
   bool hasIsBidding() => _isBidding != null;
 
+  // "current_bidder" field.
+  String? _currentBidder;
+  String get currentBidder => _currentBidder ?? '';
+  bool hasCurrentBidder() => _currentBidder != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _description = snapshotData['description'] as String?;
@@ -131,7 +131,6 @@ class ProductsRecord extends FirestoreRecord {
     _size = snapshotData['size'] as String?;
     _isPopular = snapshotData['is_popular'] as bool?;
     _category = snapshotData['category'] as String?;
-    _startingPrice = castToType<double>(snapshotData['starting_price']);
     _currentBid = castToType<double>(snapshotData['current_bid']);
     _sellerId = snapshotData['seller_id'] as String?;
     _buyerId = snapshotData['buyer_id'] as String?;
@@ -143,6 +142,7 @@ class ProductsRecord extends FirestoreRecord {
     _condition = snapshotData['condition'] as String?;
     _stock = castToType<int>(snapshotData['stock']);
     _isBidding = snapshotData['isBidding'] as bool?;
+    _currentBidder = snapshotData['current_bidder'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -188,7 +188,6 @@ Map<String, dynamic> createProductsRecordData({
   String? size,
   bool? isPopular,
   String? category,
-  double? startingPrice,
   double? currentBid,
   String? sellerId,
   String? buyerId,
@@ -200,6 +199,7 @@ Map<String, dynamic> createProductsRecordData({
   String? condition,
   int? stock,
   bool? isBidding,
+  String? currentBidder,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -211,7 +211,6 @@ Map<String, dynamic> createProductsRecordData({
       'size': size,
       'is_popular': isPopular,
       'category': category,
-      'starting_price': startingPrice,
       'current_bid': currentBid,
       'seller_id': sellerId,
       'buyer_id': buyerId,
@@ -223,6 +222,7 @@ Map<String, dynamic> createProductsRecordData({
       'condition': condition,
       'stock': stock,
       'isBidding': isBidding,
+      'current_bidder': currentBidder,
     }.withoutNulls,
   );
 
@@ -244,7 +244,6 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e1?.size == e2?.size &&
         e1?.isPopular == e2?.isPopular &&
         e1?.category == e2?.category &&
-        e1?.startingPrice == e2?.startingPrice &&
         e1?.currentBid == e2?.currentBid &&
         e1?.sellerId == e2?.sellerId &&
         e1?.buyerId == e2?.buyerId &&
@@ -255,7 +254,8 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e1?.sellerRating == e2?.sellerRating &&
         e1?.condition == e2?.condition &&
         e1?.stock == e2?.stock &&
-        e1?.isBidding == e2?.isBidding;
+        e1?.isBidding == e2?.isBidding &&
+        e1?.currentBidder == e2?.currentBidder;
   }
 
   @override
@@ -269,7 +269,6 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e?.size,
         e?.isPopular,
         e?.category,
-        e?.startingPrice,
         e?.currentBid,
         e?.sellerId,
         e?.buyerId,
@@ -280,7 +279,8 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e?.sellerRating,
         e?.condition,
         e?.stock,
-        e?.isBidding
+        e?.isBidding,
+        e?.currentBidder
       ]);
 
   @override

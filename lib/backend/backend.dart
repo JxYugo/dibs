@@ -10,6 +10,7 @@ import 'schema/products_record.dart';
 import 'schema/cart_record.dart';
 import 'schema/address_record.dart';
 import 'schema/orders_record.dart';
+import 'schema/bids_won_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -23,6 +24,7 @@ export 'schema/products_record.dart';
 export 'schema/cart_record.dart';
 export 'schema/address_record.dart';
 export 'schema/orders_record.dart';
+export 'schema/bids_won_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -213,6 +215,46 @@ Future<List<OrdersRecord>> queryOrdersRecordOnce({
     queryCollectionOnce(
       OrdersRecord.collection(parent),
       OrdersRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query BidsWonRecords (as a Stream and as a Future).
+Future<int> queryBidsWonRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      BidsWonRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<BidsWonRecord>> queryBidsWonRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      BidsWonRecord.collection(parent),
+      BidsWonRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<BidsWonRecord>> queryBidsWonRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      BidsWonRecord.collection(parent),
+      BidsWonRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

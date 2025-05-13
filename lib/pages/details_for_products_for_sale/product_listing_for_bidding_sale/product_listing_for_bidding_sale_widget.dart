@@ -1386,9 +1386,6 @@ class _ProductListingForBiddingSaleWidgetState
                                       size: _model.selectSizeValue,
                                       isPopular: false,
                                       category: _model.selectCategoryValue,
-                                      startingPrice: double.tryParse(_model
-                                          .startingBidTextController.text),
-                                      currentBid: 0.0,
                                       sellerId:
                                           productListingForBiddingSaleUsersRecord
                                               .uid,
@@ -1400,6 +1397,8 @@ class _ProductListingForBiddingSaleWidgetState
                                       isBidding: true,
                                       price: double.tryParse(
                                           _model.goalBidTextController.text),
+                                      currentBid: double.tryParse(_model
+                                          .startingBidTextController.text),
                                     ),
                                     ...mapToFirestore(
                                       {
