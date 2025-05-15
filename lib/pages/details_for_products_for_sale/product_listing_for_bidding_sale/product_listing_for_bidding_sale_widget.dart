@@ -8,6 +8,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/upload_data.dart';
+import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'product_listing_for_bidding_sale_model.dart';
@@ -1399,6 +1400,13 @@ class _ProductListingForBiddingSaleWidgetState
                                           _model.goalBidTextController.text),
                                       currentBid: double.tryParse(_model
                                           .startingBidTextController.text),
+                                      productId: random_data.randomString(
+                                        6,
+                                        10,
+                                        true,
+                                        true,
+                                        true,
+                                      ),
                                     ),
                                     ...mapToFirestore(
                                       {

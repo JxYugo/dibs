@@ -72,18 +72,22 @@ class _SignupWidgetState extends State<SignupWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.network(
-                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/dibs-l7h81u/assets/7vahi6zj9zxm/logo.png',
-                        width: 200.0,
-                        height: 200.0,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
                     Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 20.0, 0.0, 50.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/duplicate-dibs-jxq3o4/assets/7n3922w9gmmb/logo.png',
+                              width: 160.0,
+                              height: 160.0,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                         Text(
                           'Signup',
                           style:
@@ -698,6 +702,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                                         _model.fullnameTextController.text,
                                     phoneNumber:
                                         _model.phoneNumberTextController.text,
+                                    isSeller: false,
                                   ));
 
                               context.goNamedAuth(

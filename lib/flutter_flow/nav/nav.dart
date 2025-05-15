@@ -6,6 +6,7 @@ import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
+import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 import '/index.dart';
@@ -110,11 +111,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => FavoritesWidget(),
         ),
         FFRoute(
-          name: ProfileWidget.routeName,
-          path: ProfileWidget.routePath,
-          builder: (context, params) => ProfileWidget(),
-        ),
-        FFRoute(
           name: ChangeProfilePictureWidget.routeName,
           path: ChangeProfilePictureWidget.routePath,
           builder: (context, params) => ChangeProfilePictureWidget(),
@@ -167,7 +163,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: Checkout1Widget.routeName,
           path: Checkout1Widget.routePath,
-          builder: (context, params) => Checkout1Widget(),
+          builder: (context, params) => Checkout1Widget(
+            temporaryStoreCartIDsList: params.getParam<DocumentReference>(
+              'temporaryStoreCartIDsList',
+              ParamType.DocumentReference,
+              isList: true,
+              collectionNamePath: ['users', 'cart'],
+            ),
+            temporarilyStoreTotalPrice: params.getParam(
+              'temporarilyStoreTotalPrice',
+              ParamType.double,
+            ),
+          ),
         ),
         FFRoute(
           name: Checkout3Widget.routeName,
@@ -180,14 +187,33 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => Checkout2Widget(
             address: params.getParam(
               'address',
-              ParamType.String,
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['users', 'address'],
+            ),
+            totalPrice: params.getParam(
+              'totalPrice',
+              ParamType.double,
+            ),
+            storeCartIDs: params.getParam<DocumentReference>(
+              'storeCartIDs',
+              ParamType.DocumentReference,
+              isList: true,
+              collectionNamePath: ['users', 'cart'],
             ),
           ),
         ),
         FFRoute(
           name: OrderDetailsWidget.routeName,
           path: OrderDetailsWidget.routePath,
-          builder: (context, params) => OrderDetailsWidget(),
+          builder: (context, params) => OrderDetailsWidget(
+            orderRef: params.getParam(
+              'orderRef',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['users', 'orders'],
+            ),
+          ),
         ),
         FFRoute(
           name: TrackingDetailsWidget.routeName,
@@ -197,22 +223,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: AddAddressWidget.routeName,
           path: AddAddressWidget.routePath,
-          builder: (context, params) => AddAddressWidget(
-            ne: params.getParam(
-              'ne',
-              ParamType.String,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: NewCardPaymentMethodWidget.routeName,
-          path: NewCardPaymentMethodWidget.routePath,
-          builder: (context, params) => NewCardPaymentMethodWidget(),
-        ),
-        FFRoute(
-          name: NewPaymentMethodWidget.routeName,
-          path: NewPaymentMethodWidget.routePath,
-          builder: (context, params) => NewPaymentMethodWidget(),
+          builder: (context, params) => AddAddressWidget(),
         ),
         FFRoute(
           name: ChangePasswordWidget.routeName,
@@ -256,7 +267,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: SearchWidget.routeName,
           path: SearchWidget.routePath,
-          builder: (context, params) => SearchWidget(),
+          builder: (context, params) => SearchWidget(
+            searched: params.getParam(
+              'searched',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: VerifyWidget.routeName,
@@ -336,6 +352,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: SellerProfileWidget.routeName,
           path: SellerProfileWidget.routePath,
           builder: (context, params) => SellerProfileWidget(),
+        ),
+        FFRoute(
+          name: ProfileWidget.routeName,
+          path: ProfileWidget.routePath,
+          builder: (context, params) => ProfileWidget(),
+        ),
+        FFRoute(
+          name: VerifyMessageWidget.routeName,
+          path: VerifyMessageWidget.routePath,
+          builder: (context, params) => VerifyMessageWidget(),
+        ),
+        FFRoute(
+          name: HomeCopyWidget.routeName,
+          path: HomeCopyWidget.routePath,
+          builder: (context, params) => HomeCopyWidget(),
+        ),
+        FFRoute(
+          name: HomeCopyCopyWidget.routeName,
+          path: HomeCopyCopyWidget.routePath,
+          builder: (context, params) => HomeCopyCopyWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -520,14 +556,14 @@ class FFRoute {
                 )
               : builder(context, ffParams);
           final child = appStateNotifier.loading
-              ? Container(
-                  color: Color(0x00FFFFFF),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      width: MediaQuery.sizeOf(context).width * 0.6,
-                      height: MediaQuery.sizeOf(context).height * 0.6,
-                      fit: BoxFit.contain,
+              ? Center(
+                  child: SizedBox(
+                    width: 50.0,
+                    height: 50.0,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        FlutterFlowTheme.of(context).primary,
+                      ),
                     ),
                   ),
                 )

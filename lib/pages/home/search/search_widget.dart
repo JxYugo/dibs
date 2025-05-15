@@ -1,4 +1,4 @@
-import '/components/default_item/default_item_widget.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -7,11 +7,18 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:text_search/text_search.dart';
 import 'search_model.dart';
 export 'search_model.dart';
 
 class SearchWidget extends StatefulWidget {
-  const SearchWidget({super.key});
+  const SearchWidget({
+    super.key,
+    required this.searched,
+  });
+
+  final String? searched;
 
   static String routeName = 'search';
   static String routePath = '/search';
@@ -49,6 +56,8 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -147,59 +156,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                               children: [
                                 RatingBar.builder(
                                   onRatingUpdate: (newValue) => safeSetState(
-                                      () => _model.ratingBarValue1 = newValue),
-                                  itemBuilder: (context, index) => Icon(
-                                    Icons.star_rounded,
-                                    color:
-                                        FlutterFlowTheme.of(context).tertiary,
-                                  ),
-                                  direction: Axis.horizontal,
-                                  initialRating: _model.ratingBarValue1 ??= 5.0,
-                                  unratedColor:
-                                      FlutterFlowTheme.of(context).secondary,
-                                  itemCount: 5,
-                                  itemSize: 24.0,
-                                  glowColor:
-                                      FlutterFlowTheme.of(context).tertiary,
-                                ),
-                                Text(
-                                  '& Up',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        font: GoogleFonts.roboto(
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                        ),
-                                        fontSize: 15.0,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                RatingBar.builder(
-                                  onRatingUpdate: (newValue) => safeSetState(
                                       () => _model.ratingBarValue2 = newValue),
                                   itemBuilder: (context, index) => Icon(
                                     Icons.star_rounded,
@@ -207,7 +163,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                         FlutterFlowTheme.of(context).tertiary,
                                   ),
                                   direction: Axis.horizontal,
-                                  initialRating: _model.ratingBarValue2 ??= 4.0,
+                                  initialRating: _model.ratingBarValue2 ??= 5.0,
                                   unratedColor:
                                       FlutterFlowTheme.of(context).secondary,
                                   itemCount: 5,
@@ -260,7 +216,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                         FlutterFlowTheme.of(context).tertiary,
                                   ),
                                   direction: Axis.horizontal,
-                                  initialRating: _model.ratingBarValue3 ??= 3.0,
+                                  initialRating: _model.ratingBarValue3 ??= 4.0,
                                   unratedColor:
                                       FlutterFlowTheme.of(context).secondary,
                                   itemCount: 5,
@@ -313,7 +269,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                         FlutterFlowTheme.of(context).tertiary,
                                   ),
                                   direction: Axis.horizontal,
-                                  initialRating: _model.ratingBarValue4 ??= 2.0,
+                                  initialRating: _model.ratingBarValue4 ??= 3.0,
                                   unratedColor:
                                       FlutterFlowTheme.of(context).secondary,
                                   itemCount: 5,
@@ -366,7 +322,60 @@ class _SearchWidgetState extends State<SearchWidget> {
                                         FlutterFlowTheme.of(context).tertiary,
                                   ),
                                   direction: Axis.horizontal,
-                                  initialRating: _model.ratingBarValue5 ??= 1.0,
+                                  initialRating: _model.ratingBarValue5 ??= 2.0,
+                                  unratedColor:
+                                      FlutterFlowTheme.of(context).secondary,
+                                  itemCount: 5,
+                                  itemSize: 24.0,
+                                  glowColor:
+                                      FlutterFlowTheme.of(context).tertiary,
+                                ),
+                                Text(
+                                  '& Up',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.roboto(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
+                                        fontSize: 15.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                RatingBar.builder(
+                                  onRatingUpdate: (newValue) => safeSetState(
+                                      () => _model.ratingBarValue6 = newValue),
+                                  itemBuilder: (context, index) => Icon(
+                                    Icons.star_rounded,
+                                    color:
+                                        FlutterFlowTheme.of(context).tertiary,
+                                  ),
+                                  direction: Axis.horizontal,
+                                  initialRating: _model.ratingBarValue6 ??= 1.0,
                                   unratedColor:
                                       FlutterFlowTheme.of(context).secondary,
                                   itemCount: 5,
@@ -1774,6 +1783,27 @@ class _SearchWidgetState extends State<SearchWidget> {
                             child: TextFormField(
                               controller: _model.searchTextfieldTextController,
                               focusNode: _model.searchTextfieldFocusNode,
+                              onFieldSubmitted: (_) async {
+                                await queryProductsRecordOnce()
+                                    .then(
+                                      (records) => _model.simpleSearchResults =
+                                          TextSearch(
+                                        records
+                                            .map(
+                                              (record) =>
+                                                  TextSearchItem.fromTerms(
+                                                      record, [record.name]),
+                                            )
+                                            .toList(),
+                                      )
+                                              .search(FFAppState().searched)
+                                              .map((r) => r.object)
+                                              .toList(),
+                                    )
+                                    .onError((_, __) =>
+                                        _model.simpleSearchResults = [])
+                                    .whenComplete(() => safeSetState(() {}));
+                              },
                               autofocus: false,
                               obscureText: false,
                               decoration: InputDecoration(
@@ -1797,7 +1827,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                           .labelMedium
                                           .fontStyle,
                                     ),
-                                hintText: 'Search',
+                                hintText: FFAppState().searched,
                                 hintStyle: FlutterFlowTheme.of(context)
                                     .labelMedium
                                     .override(
@@ -1907,24 +1937,167 @@ class _SearchWidgetState extends State<SearchWidget> {
                         decoration: BoxDecoration(
                           color: FlutterFlowTheme.of(context).primaryBackground,
                         ),
-                        child: GridView(
-                          padding: EdgeInsets.zero,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10.0,
-                            mainAxisSpacing: 10.0,
-                            childAspectRatio: 0.71,
-                          ),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          children: [
-                            wrapWithModel(
-                              model: _model.defaultItemModel,
-                              updateCallback: () => safeSetState(() {}),
-                              child: DefaultItemWidget(),
-                            ),
-                          ],
+                        child: StreamBuilder<List<ProductsRecord>>(
+                          stream: queryProductsRecord(),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      FlutterFlowTheme.of(context).primary,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            List<ProductsRecord> gridViewProductsRecordList =
+                                snapshot.data!;
+
+                            return GridView.builder(
+                              padding: EdgeInsets.zero,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10.0,
+                                mainAxisSpacing: 10.0,
+                                childAspectRatio: 0.71,
+                              ),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: gridViewProductsRecordList.length,
+                              itemBuilder: (context, gridViewIndex) {
+                                final gridViewProductsRecord =
+                                    gridViewProductsRecordList[gridViewIndex];
+                                return Container(
+                                  width: 160.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                      color: FlutterFlowTheme.of(context)
+                                          .alternate,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(0.0),
+                                          bottomRight: Radius.circular(0.0),
+                                          topLeft: Radius.circular(8.0),
+                                          topRight: Radius.circular(8.0),
+                                        ),
+                                        child: Image.network(
+                                          gridViewProductsRecord.images
+                                              .take(1)
+                                              .toList()
+                                              .firstOrNull!,
+                                          width: double.infinity,
+                                          height: 160.0,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            7.0, 0.0, 7.0, 0.0),
+                                        child: Text(
+                                          gridViewProductsRecord.name,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.roboto(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                fontSize: 16.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            7.0, 0.0, 7.0, 0.0),
+                                        child: Text(
+                                          formatNumber(
+                                            gridViewProductsRecord.price,
+                                            formatType: FormatType.custom,
+                                            currency: '₱',
+                                            format: '#.##',
+                                            locale: '',
+                                          ),
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.roboto(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                fontSize: 18.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            7.0, 0.0, 7.0, 0.0),
+                                        child: RatingBarIndicator(
+                                          itemBuilder: (context, index) => Icon(
+                                            Icons.star_rounded,
+                                            color: FlutterFlowTheme.of(context)
+                                                .accent1,
+                                          ),
+                                          direction: Axis.horizontal,
+                                          rating: gridViewProductsRecord
+                                              .sellerRating,
+                                          unratedColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryText,
+                                          itemCount: 5,
+                                          itemSize: 15.0,
+                                        ),
+                                      ),
+                                    ].divide(SizedBox(height: 3.0)),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
                       ),
                     ),

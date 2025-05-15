@@ -4,6 +4,10 @@ import 'profile_widget.dart' show ProfileWidget;
 import 'package:flutter/material.dart';
 
 class ProfileModel extends FlutterFlowModel<ProfileWidget> {
+  ///  Local state fields for this page.
+
+  double totalPrice = 0.0;
+
   @override
   void initState(BuildContext context) {}
 

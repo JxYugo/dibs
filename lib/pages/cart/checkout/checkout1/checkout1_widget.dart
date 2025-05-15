@@ -13,7 +13,17 @@ import 'checkout1_model.dart';
 export 'checkout1_model.dart';
 
 class Checkout1Widget extends StatefulWidget {
-  const Checkout1Widget({super.key});
+  const Checkout1Widget({
+    super.key,
+    required this.temporaryStoreCartIDsList,
+    required this.temporarilyStoreTotalPrice,
+  });
+
+  /// temporarily store cart IDs in a list
+  final List<DocumentReference>? temporaryStoreCartIDsList;
+
+  /// temporary store total price
+  final double? temporarilyStoreTotalPrice;
 
   static String routeName = 'checkout1';
   static String routePath = '/checkout1';
@@ -351,79 +361,95 @@ class _Checkout1WidgetState extends State<Checkout1Widget> {
                           ),
                         ),
                       ),
-                      StreamBuilder<List<AddressRecord>>(
-                        stream: queryAddressRecord(
-                          parent: currentUserReference,
-                        ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50.0,
-                                height: 50.0,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    FlutterFlowTheme.of(context).primary,
-                                  ),
-                                ),
+                      SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            StreamBuilder<List<AddressRecord>>(
+                              stream: queryAddressRecord(
+                                parent: currentUserReference,
                               ),
-                            );
-                          }
-                          List<AddressRecord> listViewAddressRecordList =
-                              snapshot.data!;
-                          if (listViewAddressRecordList.isEmpty) {
-                            return Center(
-                              child: NoItemsComponentWidget(),
-                            );
-                          }
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50.0,
+                                      height: 50.0,
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          FlutterFlowTheme.of(context).primary,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                                List<AddressRecord> listViewAddressRecordList =
+                                    snapshot.data!;
+                                if (listViewAddressRecordList.isEmpty) {
+                                  return Center(
+                                    child: NoItemsComponentWidget(),
+                                  );
+                                }
 
-                          return ListView.separated(
-                            padding: EdgeInsets.fromLTRB(
-                              0,
-                              0,
-                              0,
-                              20.0,
+                                return ListView.separated(
+                                  padding: EdgeInsets.fromLTRB(
+                                    0,
+                                    0,
+                                    0,
+                                    20.0,
+                                  ),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: listViewAddressRecordList.length,
+                                  separatorBuilder: (_, __) =>
+                                      SizedBox(height: 15.0),
+                                  itemBuilder: (context, listViewIndex) {
+                                    final listViewAddressRecord =
+                                        listViewAddressRecordList[
+                                            listViewIndex];
+                                    return InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        _model.selectedAddressRef = null;
+                                        safeSetState(() {});
+                                        _model.selectedAddressRef =
+                                            listViewAddressRecord.reference;
+                                        safeSetState(() {});
+                                      },
+                                      child: AddressInCheckoutWidget(
+                                        key: Key(
+                                            'Keyih8_${listViewIndex}_of_${listViewAddressRecordList.length}'),
+                                        parameter1:
+                                            listViewAddressRecord.addressName,
+                                        parameter2: listViewAddressRecord,
+                                        parameter3:
+                                            listViewAddressRecord.reference,
+                                        parameter4:
+                                            listViewAddressRecord.houseNumber,
+                                        parameter5:
+                                            listViewAddressRecord.street,
+                                        parameter6: listViewAddressRecord.city,
+                                        parameter7:
+                                            listViewAddressRecord.stateProvince,
+                                        parameter8:
+                                            listViewAddressRecord.country,
+                                        parameter9:
+                                            listViewAddressRecord.zipCode,
+                                        isSelected: _model.selectedAddressRef ==
+                                            listViewAddressRecord.reference,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: listViewAddressRecordList.length,
-                            separatorBuilder: (_, __) => SizedBox(height: 15.0),
-                            itemBuilder: (context, listViewIndex) {
-                              final listViewAddressRecord =
-                                  listViewAddressRecordList[listViewIndex];
-                              return InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  _model.selectedAddressRef = null;
-                                  safeSetState(() {});
-                                  _model.selectedAddressRef =
-                                      listViewAddressRecord.reference;
-                                  safeSetState(() {});
-                                },
-                                child: AddressInCheckoutWidget(
-                                  key: Key(
-                                      'Keyih8_${listViewIndex}_of_${listViewAddressRecordList.length}'),
-                                  parameter1: listViewAddressRecord.addressName,
-                                  parameter2: listViewAddressRecord,
-                                  parameter3: listViewAddressRecord.reference,
-                                  parameter4: listViewAddressRecord.houseNumber,
-                                  parameter5: listViewAddressRecord.street,
-                                  parameter6: listViewAddressRecord.city,
-                                  parameter7:
-                                      listViewAddressRecord.stateProvince,
-                                  parameter8: listViewAddressRecord.country,
-                                  parameter9: listViewAddressRecord.zipCode,
-                                  isSelected: _model.selectedAddressRef ==
-                                      listViewAddressRecord.reference,
-                                ),
-                              );
-                            },
-                          );
-                        },
+                          ],
+                        ),
                       ),
                     ].divide(SizedBox(height: 20.0)),
                   ),
@@ -438,8 +464,17 @@ class _Checkout1WidgetState extends State<Checkout1Widget> {
                         Checkout2Widget.routeName,
                         queryParameters: {
                           'address': serializeParam(
-                            _model.selectedAddressRef?.id,
-                            ParamType.String,
+                            _model.selectedAddressRef,
+                            ParamType.DocumentReference,
+                          ),
+                          'totalPrice': serializeParam(
+                            widget.temporarilyStoreTotalPrice,
+                            ParamType.double,
+                          ),
+                          'storeCartIDs': serializeParam(
+                            widget.temporaryStoreCartIDsList,
+                            ParamType.DocumentReference,
+                            isList: true,
                           ),
                         }.withoutNulls,
                       );

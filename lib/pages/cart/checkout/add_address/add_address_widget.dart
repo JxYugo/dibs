@@ -11,12 +11,7 @@ export 'add_address_model.dart';
 
 /// backend done
 class AddAddressWidget extends StatefulWidget {
-  const AddAddressWidget({
-    super.key,
-    this.ne,
-  });
-
-  final String? ne;
+  const AddAddressWidget({super.key});
 
   static String routeName = 'add_address';
   static String routePath = '/addAddress';

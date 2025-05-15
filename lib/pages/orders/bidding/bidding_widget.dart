@@ -152,9 +152,7 @@ class _BiddingWidgetState extends State<BiddingWidget> {
               Align(
                 alignment: AlignmentDirectional(0.0, 0.0),
                 child: FFButtonWidget(
-                  onPressed: () async {
-                    context.pushNamed(BidsWidget.routeName);
-                  },
+                  onPressed: () async {},
                   text: 'Check bid status',
                   options: FFButtonOptions(
                     width: 300.0,

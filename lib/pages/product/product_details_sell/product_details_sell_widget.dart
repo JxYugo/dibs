@@ -4,42 +4,49 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/index.dart';
+import '/flutter_flow/admob_util.dart' as admob;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'product_details_bid_model.dart';
-export 'product_details_bid_model.dart';
+import 'product_details_sell_model.dart';
+export 'product_details_sell_model.dart';
 
-class ProductDetailsBidWidget extends StatefulWidget {
-  const ProductDetailsBidWidget({
+class ProductDetailsSellWidget extends StatefulWidget {
+  const ProductDetailsSellWidget({
     super.key,
-    required this.productReference,
+    required this.productsRef,
   });
 
-  final DocumentReference? productReference;
+  final DocumentReference? productsRef;
 
-  static String routeName = 'productDetailsBid';
-  static String routePath = '/productDetailsBid';
+  static String routeName = 'productDetailsSell';
+  static String routePath = '/productDetailsSell';
 
   @override
-  State<ProductDetailsBidWidget> createState() =>
-      _ProductDetailsBidWidgetState();
+  State<ProductDetailsSellWidget> createState() =>
+      _ProductDetailsSellWidgetState();
 }
 
-class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
-  late ProductDetailsBidModel _model;
+class _ProductDetailsSellWidgetState extends State<ProductDetailsSellWidget> {
+  late ProductDetailsSellModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ProductDetailsBidModel());
+    _model = createModel(context, () => ProductDetailsSellModel());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      admob.loadInterstitialAd(
+        "",
+        "ca-app-pub-6978288707149884/7909973085",
+        true,
+      );
+    });
   }
 
   @override
@@ -52,7 +59,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ProductsRecord>(
-      stream: ProductsRecord.getDocument(widget.productReference!),
+      stream: ProductsRecord.getDocument(widget.productsRef!),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -72,7 +79,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
           );
         }
 
-        final productDetailsBidProductsRecord = snapshot.data!;
+        final productDetailsSellProductsRecord = snapshot.data!;
 
         return GestureDetector(
           onTap: () {
@@ -97,9 +104,9 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                         child: FlutterFlowIconButton(
                           borderRadius: 20.0,
                           buttonSize: 40.0,
-                          fillColor: Color(0x80000000),
+                          fillColor: FlutterFlowTheme.of(context).primary,
                           icon: Icon(
-                            Icons.arrow_back_rounded,
+                            Icons.arrow_back_ios_rounded,
                             color: Colors.white,
                             size: 24.0,
                           ),
@@ -115,7 +122,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                       Builder(
                         builder: (context) {
                           final images =
-                              productDetailsBidProductsRecord.images.toList();
+                              productDetailsSellProductsRecord.images.toList();
 
                           return Container(
                             width: double.infinity,
@@ -196,7 +203,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            productDetailsBidProductsRecord
+                                            productDetailsSellProductsRecord
                                                 .name,
                                             style: FlutterFlowTheme.of(context)
                                                 .headlineMedium
@@ -223,7 +230,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 4.0, 0.0, 0.0),
                                             child: Text(
-                                              productDetailsBidProductsRecord
+                                              productDetailsSellProductsRecord
                                                   .sellerId,
                                               style: FlutterFlowTheme.of(
                                                       context)
@@ -280,7 +287,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(4.0, 0.0, 4.0, 0.0),
                                               child: Text(
-                                                'Wala pa ni sulod',
+                                                '0',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium
@@ -312,7 +319,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 4.0, 0.0, 0.0),
                                           child: Text(
-                                            '(wala pa ni sulod)',
+                                            '(0)',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodySmall
                                                 .override(
@@ -355,306 +362,201 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                 ),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          30.0, 10.0, 30.0, 10.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 5.0, 0.0),
-                                            child: Icon(
-                                              Icons.access_time_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
-                                              size: 14.0,
-                                            ),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          formatNumber(
+                                            productDetailsSellProductsRecord
+                                                .price,
+                                            formatType: FormatType.custom,
+                                            currency: '₱',
+                                            format: '#.##',
+                                            locale: '',
                                           ),
-                                          Text(
-                                            'pati ni',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  font: GoogleFonts.nunito(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleLarge
+                                              .override(
+                                                font: GoogleFonts.roboto(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleLarge
+                                                          .fontStyle,
+                                                ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleLarge
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      width: 160.0,
+                                      height: 40.0,
+                                      decoration: BoxDecoration(
+                                        color: Color(0x00F5F5F5),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(12.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Stock:',
+                                              textAlign: TextAlign.center,
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    font: GoogleFonts.roboto(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .fontStyle,
+                                                    ),
+                                                    fontSize: 16.0,
+                                                    letterSpacing: 0.0,
+                                                    fontWeight: FontWeight.w600,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
                                                                 context)
                                                             .bodyMedium
                                                             .fontStyle,
                                                   ),
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    6.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'remaining',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font:
-                                                            GoogleFonts.nunito(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
                                             ),
-                                          ),
-                                        ],
+                                            Text(
+                                              productDetailsSellProductsRecord
+                                                  .stock
+                                                  .toString(),
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyLarge
+                                                  .override(
+                                                    font: GoogleFonts.roboto(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyLarge
+                                                              .fontStyle,
+                                                    ),
+                                                    letterSpacing: 0.0,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyLarge
+                                                            .fontStyle,
+                                                  ),
+                                            ),
+                                          ].divide(SizedBox(width: 10.0)),
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      70.0, 0.0, 70.0, 10.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            'Goal Bid',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  font: GoogleFonts.roboto(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  fontSize: 15.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                          Text(
-                                            formatNumber(
-                                              productDetailsBidProductsRecord
+                                      24.0, 0.0, 24.0, 0.0),
+                                  child: FFButtonWidget(
+                                    onPressed: () async {
+                                      await CartRecord.createDoc(
+                                              currentUserReference!)
+                                          .set({
+                                        ...createCartRecordData(
+                                          productName:
+                                              productDetailsSellProductsRecord
+                                                  .name,
+                                          price:
+                                              productDetailsSellProductsRecord
                                                   .price,
-                                              formatType: FormatType.custom,
-                                              currency: '₱',
-                                              format: '#.##',
-                                              locale: '',
-                                            ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  font: GoogleFonts.roboto(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  fontSize: 20.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            'Current Bid',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  font: GoogleFonts.roboto(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  fontSize: 15.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                          Text(
-                                            formatNumber(
-                                              productDetailsBidProductsRecord
-                                                  .currentBid,
-                                              formatType: FormatType.custom,
-                                              currency: '₱',
-                                              format: '#.##',
-                                              locale: '',
-                                            ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  font: GoogleFonts.roboto(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  fontSize: 20.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional(0.0, 0.0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        6.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      'Current Bidder: ',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
+                                          vendor:
+                                              productDetailsSellProductsRecord
+                                                  .sellerId,
+                                          productId:
+                                              productDetailsSellProductsRecord
+                                                  .reference.id,
+                                        ),
+                                        ...mapToFirestore(
+                                          {
+                                            'added_at':
+                                                FieldValue.serverTimestamp(),
+                                            'product_images': [
+                                              productDetailsSellProductsRecord
+                                                  .images.firstOrNull
+                                            ],
+                                          },
+                                        ),
+                                      });
+
+                                      await productDetailsSellProductsRecord
+                                          .reference
+                                          .update({
+                                        ...mapToFirestore(
+                                          {
+                                            'stock': FieldValue.increment(-(1)),
+                                          },
+                                        ),
+                                      });
+                                    },
+                                    text: 'Add to Cart',
+                                    options: FFButtonOptions(
+                                      width: double.infinity,
+                                      height: 50.0,
+                                      padding: EdgeInsets.all(8.0),
+                                      iconPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
                                           .override(
-                                            font: GoogleFonts.nunito(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
+                                            font: GoogleFonts.roboto(
+                                              fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
-                                                      .bodyMedium
+                                                      .titleSmall
                                                       .fontStyle,
                                             ),
+                                            color: Colors.white,
                                             letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
+                                            fontWeight: FontWeight.w600,
                                             fontStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .bodyMedium
+                                                    .titleSmall
                                                     .fontStyle,
                                           ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional(0.0, 0.0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        6.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      productDetailsBidProductsRecord
-                                          .currentBidder,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.nunito(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
+                                      elevation: 0.0,
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(12.0),
                                     ),
                                   ),
                                 ),
@@ -687,7 +589,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                           ),
                                     ),
                                     Text(
-                                      productDetailsBidProductsRecord
+                                      productDetailsSellProductsRecord
                                           .description,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -806,7 +708,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                                     .fromSTEB(
                                                         8.0, 0.0, 0.0, 0.0),
                                                 child: Text(
-                                                  productDetailsBidProductsRecord
+                                                  productDetailsSellProductsRecord
                                                       .size,
                                                   style: FlutterFlowTheme.of(
                                                           context)
@@ -895,96 +797,8 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(8.0, 0.0, 0.0, 0.0),
                                               child: Text(
-                                                productDetailsBidProductsRecord
+                                                productDetailsSellProductsRecord
                                                     .condition,
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.roboto(
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  8.0, 0.0, 8.0, 0.0),
-                                          child: Icon(
-                                            Icons.numbers_sharp,
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            size: 16.0,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Number of Items in bid:',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.roboto(
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                letterSpacing: 0.0,
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(8.0, 0.0, 0.0, 0.0),
-                                              child: Text(
-                                                productDetailsBidProductsRecord
-                                                    .stock
-                                                    .toString(),
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium
@@ -1028,237 +842,7 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                    child: Container(
-                      width: 200.0,
-                      child: TextFormField(
-                        controller: _model.textController,
-                        focusNode: _model.textFieldFocusNode,
-                        autofocus: false,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          labelStyle:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    font: GoogleFonts.roboto(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                    color: Colors.black,
-                                    fontSize: 15.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontStyle,
-                                  ),
-                          hintText: 'Enter bid amount',
-                          hintStyle:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    font: GoogleFonts.roboto(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                    fontSize: 15.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontStyle,
-                                  ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).alternate,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).error,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).error,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          filled: true,
-                          fillColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                        ),
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.roboto(
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontStyle,
-                              ),
-                              color: Colors.black,
-                              fontSize: 15.0,
-                              letterSpacing: 0.0,
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontWeight,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontStyle,
-                            ),
-                        textAlign: TextAlign.center,
-                        cursorColor: FlutterFlowTheme.of(context).primaryText,
-                        validator:
-                            _model.textControllerValidator.asValidator(context),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 1.0),
-                    child: Container(
-                      width: double.infinity,
-                      height: 80.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 10.0,
-                            color: Color(0x1A000000),
-                            offset: Offset(
-                              0.0,
-                              -2.0,
-                            ),
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            24.0, 0.0, 24.0, 0.0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            _model.bidAmount =
-                                double.parse(_model.textController.text);
-                            safeSetState(() {});
-                            if ((productDetailsBidProductsRecord.currentBid >
-                                    _model.bidAmount) ||
-                                (productDetailsBidProductsRecord.price <
-                                    _model.bidAmount) ||
-                                (productDetailsBidProductsRecord.currentBid ==
-                                    _model.bidAmount)) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Invalid bid offer',
-                                    style: TextStyle(
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                    ),
-                                  ),
-                                  duration: Duration(milliseconds: 4000),
-                                  backgroundColor:
-                                      FlutterFlowTheme.of(context).secondary,
-                                ),
-                              );
-                            } else {
-                              if (productDetailsBidProductsRecord.price ==
-                                  _model.bidAmount) {
-                                await BidsWonRecord.createDoc(
-                                        currentUserReference!)
-                                    .set({
-                                  ...createBidsWonRecordData(
-                                    productName:
-                                        productDetailsBidProductsRecord.name,
-                                    price:
-                                        productDetailsBidProductsRecord.price,
-                                    vendor: productDetailsBidProductsRecord
-                                        .sellerId,
-                                  ),
-                                  ...mapToFirestore(
-                                    {
-                                      'added_at': FieldValue.serverTimestamp(),
-                                      'product_images': [
-                                        productDetailsBidProductsRecord
-                                            .images.firstOrNull
-                                      ],
-                                    },
-                                  ),
-                                });
-
-                                context.pushNamed(BiddingWidget.routeName);
-                              } else {
-                                await widget.productReference!
-                                    .update(createProductsRecordData(
-                                  currentBidder: valueOrDefault(
-                                      currentUserDocument?.fullname, ''),
-                                  currentBid: double.tryParse(
-                                      _model.textController.text),
-                                ));
-
-                                context.pushNamed(BiddingWidget.routeName);
-                              }
-                            }
-                          },
-                          text: 'Add Offer',
-                          options: FFButtonOptions(
-                            width: double.infinity,
-                            height: 50.0,
-                            padding: EdgeInsets.all(8.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: FlutterFlowTheme.of(context).primary,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  font: GoogleFonts.roboto(
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                  ),
-                                  color: Colors.white,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
-                                ),
-                            elevation: 0.0,
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ].addToEnd(SizedBox(height: 2.0)),
               ),
             ),
           ),

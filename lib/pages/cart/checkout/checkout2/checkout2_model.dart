@@ -5,6 +5,14 @@ import 'checkout2_widget.dart' show Checkout2Widget;
 import 'package:flutter/material.dart';
 
 class Checkout2Model extends FlutterFlowModel<Checkout2Widget> {
+  ///  Local state fields for this page.
+
+  double deliveryFee = 25.0;
+
+  String? paymentMethod;
+
+  int indexCounter = 0;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for CreditCardForm widget.

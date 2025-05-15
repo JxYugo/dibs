@@ -65,6 +65,26 @@ class UsersRecord extends FirestoreRecord {
   bool get isSellerPremium => _isSellerPremium ?? false;
   bool hasIsSellerPremium() => _isSellerPremium != null;
 
+  // "age" field.
+  int? _age;
+  int get age => _age ?? 0;
+  bool hasAge() => _age != null;
+
+  // "sex" field.
+  String? _sex;
+  String get sex => _sex ?? '';
+  bool hasSex() => _sex != null;
+
+  // "birthdate" field.
+  DateTime? _birthdate;
+  DateTime? get birthdate => _birthdate;
+  bool hasBirthdate() => _birthdate != null;
+
+  // "rating" field.
+  double? _rating;
+  double get rating => _rating ?? 0.0;
+  bool hasRating() => _rating != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _photoUrl = snapshotData['photo_url'] as String?;
@@ -76,6 +96,10 @@ class UsersRecord extends FirestoreRecord {
     _displayName = snapshotData['display_name'] as String?;
     _isSeller = snapshotData['is_seller'] as bool?;
     _isSellerPremium = snapshotData['is_seller_premium'] as bool?;
+    _age = castToType<int>(snapshotData['age']);
+    _sex = snapshotData['sex'] as String?;
+    _birthdate = snapshotData['birthdate'] as DateTime?;
+    _rating = castToType<double>(snapshotData['rating']);
   }
 
   static CollectionReference get collection =>
@@ -122,6 +146,10 @@ Map<String, dynamic> createUsersRecordData({
   String? displayName,
   bool? isSeller,
   bool? isSellerPremium,
+  int? age,
+  String? sex,
+  DateTime? birthdate,
+  double? rating,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -135,6 +163,10 @@ Map<String, dynamic> createUsersRecordData({
       'display_name': displayName,
       'is_seller': isSeller,
       'is_seller_premium': isSellerPremium,
+      'age': age,
+      'sex': sex,
+      'birthdate': birthdate,
+      'rating': rating,
     }.withoutNulls,
   );
 
@@ -155,7 +187,11 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.password == e2?.password &&
         e1?.displayName == e2?.displayName &&
         e1?.isSeller == e2?.isSeller &&
-        e1?.isSellerPremium == e2?.isSellerPremium;
+        e1?.isSellerPremium == e2?.isSellerPremium &&
+        e1?.age == e2?.age &&
+        e1?.sex == e2?.sex &&
+        e1?.birthdate == e2?.birthdate &&
+        e1?.rating == e2?.rating;
   }
 
   @override
@@ -169,7 +205,11 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.password,
         e?.displayName,
         e?.isSeller,
-        e?.isSellerPremium
+        e?.isSellerPremium,
+        e?.age,
+        e?.sex,
+        e?.birthdate,
+        e?.rating
       ]);
 
   @override

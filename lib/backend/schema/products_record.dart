@@ -56,11 +56,6 @@ class ProductsRecord extends FirestoreRecord {
   bool get isPopular => _isPopular ?? false;
   bool hasIsPopular() => _isPopular != null;
 
-  // "category" field.
-  String? _category;
-  String get category => _category ?? '';
-  bool hasCategory() => _category != null;
-
   // "current_bid" field.
   double? _currentBid;
   double get currentBid => _currentBid ?? 0.0;
@@ -121,6 +116,16 @@ class ProductsRecord extends FirestoreRecord {
   String get currentBidder => _currentBidder ?? '';
   bool hasCurrentBidder() => _currentBidder != null;
 
+  // "category" field.
+  String? _category;
+  String get category => _category ?? '';
+  bool hasCategory() => _category != null;
+
+  // "product_id" field.
+  String? _productId;
+  String get productId => _productId ?? '';
+  bool hasProductId() => _productId != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _description = snapshotData['description'] as String?;
@@ -130,7 +135,6 @@ class ProductsRecord extends FirestoreRecord {
     _images = getDataList(snapshotData['images']);
     _size = snapshotData['size'] as String?;
     _isPopular = snapshotData['is_popular'] as bool?;
-    _category = snapshotData['category'] as String?;
     _currentBid = castToType<double>(snapshotData['current_bid']);
     _sellerId = snapshotData['seller_id'] as String?;
     _buyerId = snapshotData['buyer_id'] as String?;
@@ -143,6 +147,8 @@ class ProductsRecord extends FirestoreRecord {
     _stock = castToType<int>(snapshotData['stock']);
     _isBidding = snapshotData['isBidding'] as bool?;
     _currentBidder = snapshotData['current_bidder'] as String?;
+    _category = snapshotData['category'] as String?;
+    _productId = snapshotData['product_id'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -187,7 +193,6 @@ Map<String, dynamic> createProductsRecordData({
   DateTime? createdTime,
   String? size,
   bool? isPopular,
-  String? category,
   double? currentBid,
   String? sellerId,
   String? buyerId,
@@ -200,6 +205,8 @@ Map<String, dynamic> createProductsRecordData({
   int? stock,
   bool? isBidding,
   String? currentBidder,
+  String? category,
+  String? productId,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -210,7 +217,6 @@ Map<String, dynamic> createProductsRecordData({
       'created_time': createdTime,
       'size': size,
       'is_popular': isPopular,
-      'category': category,
       'current_bid': currentBid,
       'seller_id': sellerId,
       'buyer_id': buyerId,
@@ -223,6 +229,8 @@ Map<String, dynamic> createProductsRecordData({
       'stock': stock,
       'isBidding': isBidding,
       'current_bidder': currentBidder,
+      'category': category,
+      'product_id': productId,
     }.withoutNulls,
   );
 
@@ -243,7 +251,6 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         listEquality.equals(e1?.images, e2?.images) &&
         e1?.size == e2?.size &&
         e1?.isPopular == e2?.isPopular &&
-        e1?.category == e2?.category &&
         e1?.currentBid == e2?.currentBid &&
         e1?.sellerId == e2?.sellerId &&
         e1?.buyerId == e2?.buyerId &&
@@ -255,7 +262,9 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e1?.condition == e2?.condition &&
         e1?.stock == e2?.stock &&
         e1?.isBidding == e2?.isBidding &&
-        e1?.currentBidder == e2?.currentBidder;
+        e1?.currentBidder == e2?.currentBidder &&
+        e1?.category == e2?.category &&
+        e1?.productId == e2?.productId;
   }
 
   @override
@@ -268,7 +277,6 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e?.images,
         e?.size,
         e?.isPopular,
-        e?.category,
         e?.currentBid,
         e?.sellerId,
         e?.buyerId,
@@ -280,7 +288,9 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e?.condition,
         e?.stock,
         e?.isBidding,
-        e?.currentBidder
+        e?.currentBidder,
+        e?.category,
+        e?.productId
       ]);
 
   @override

@@ -63,13 +63,16 @@ class _LoginWidgetState extends State<LoginWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/dibs-l7h81u/assets/7vahi6zj9zxm/logo.png',
-                    width: 200.0,
-                    height: 200.0,
-                    fit: BoxFit.cover,
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 50.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/duplicate-dibs-jxq3o4/assets/7n3922w9gmmb/logo.png',
+                      width: 160.0,
+                      height: 160.0,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Column(

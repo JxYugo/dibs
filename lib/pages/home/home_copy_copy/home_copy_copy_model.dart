@@ -1,10 +1,10 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
-import 'home_widget.dart' show HomeWidget;
+import 'home_copy_copy_widget.dart' show HomeCopyCopyWidget;
 import 'package:flutter/material.dart';
 
-class HomeModel extends FlutterFlowModel<HomeWidget> {
+class HomeCopyCopyModel extends FlutterFlowModel<HomeCopyCopyWidget> {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for search_textfield widget.

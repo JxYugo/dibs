@@ -32,3 +32,12 @@ double doubleSum(List<double> doubleList) {
   }
   return sum;
 }
+
+double totalPriceAfterShippingFee(
+  double totalPrice,
+  double shippingFee,
+) {
+  double sum = totalPrice + shippingFee;
+
+  return sum;
+}

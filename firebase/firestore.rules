@@ -37,15 +37,41 @@ service cloud.firestore {
     }
 
     match /users/{parent}/bidsWon/{document} {
+      allow create: if request.auth.uid == parent;
+      allow read: if request.auth.uid == parent;
+      allow write: if request.auth.uid == parent;
+      allow delete: if request.auth.uid == parent;
+    }
+
+    match /users/{parent}/verified_details/{document} {
       allow create: if true;
       allow read: if true;
       allow write: if true;
       allow delete: if true;
     }
 
-    match /{path=**}/bidsWon/{document} {
+    match /{path=**}/verified_details/{document} {
       allow read: if true;
     }
 
+
+    match /users/{parent}/wishlist/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
+    }
+
+    match /{path=**}/wishlist/{document} {
+      allow read: if true;
+    }
+
+
+    match /review/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
+    }
   }
 }

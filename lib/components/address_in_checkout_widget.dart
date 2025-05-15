@@ -220,15 +220,23 @@ class _AddressInCheckoutWidgetState extends State<AddressInCheckoutWidget> {
                         FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                   ),
             ),
-            if (widget.isSelected == true)
-              Align(
-                alignment: AlignmentDirectional(1.0, 0.0),
-                child: Icon(
-                  Icons.check_sharp,
-                  color: FlutterFlowTheme.of(context).secondary,
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(
+                  Icons.arrow_back,
+                  color: FlutterFlowTheme.of(context).tertiary,
                   size: 24.0,
                 ),
-              ),
+                if (widget.isSelected == true)
+                  Icon(
+                    Icons.check_sharp,
+                    color: FlutterFlowTheme.of(context).secondary,
+                    size: 24.0,
+                  ),
+              ],
+            ),
           ].divide(SizedBox(height: 2.0)),
         ),
       ),

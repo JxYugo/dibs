@@ -11,6 +11,9 @@ import 'schema/cart_record.dart';
 import 'schema/address_record.dart';
 import 'schema/orders_record.dart';
 import 'schema/bids_won_record.dart';
+import 'schema/verified_details_record.dart';
+import 'schema/wishlist_record.dart';
+import 'schema/review_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -25,6 +28,9 @@ export 'schema/cart_record.dart';
 export 'schema/address_record.dart';
 export 'schema/orders_record.dart';
 export 'schema/bids_won_record.dart';
+export 'schema/verified_details_record.dart';
+export 'schema/wishlist_record.dart';
+export 'schema/review_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -255,6 +261,123 @@ Future<List<BidsWonRecord>> queryBidsWonRecordOnce({
     queryCollectionOnce(
       BidsWonRecord.collection(parent),
       BidsWonRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query VerifiedDetailsRecords (as a Stream and as a Future).
+Future<int> queryVerifiedDetailsRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      VerifiedDetailsRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<VerifiedDetailsRecord>> queryVerifiedDetailsRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      VerifiedDetailsRecord.collection(parent),
+      VerifiedDetailsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<VerifiedDetailsRecord>> queryVerifiedDetailsRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      VerifiedDetailsRecord.collection(parent),
+      VerifiedDetailsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query WishlistRecords (as a Stream and as a Future).
+Future<int> queryWishlistRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      WishlistRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<WishlistRecord>> queryWishlistRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      WishlistRecord.collection(parent),
+      WishlistRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<WishlistRecord>> queryWishlistRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      WishlistRecord.collection(parent),
+      WishlistRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query ReviewRecords (as a Stream and as a Future).
+Future<int> queryReviewRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      ReviewRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<ReviewRecord>> queryReviewRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      ReviewRecord.collection,
+      ReviewRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<ReviewRecord>> queryReviewRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      ReviewRecord.collection,
+      ReviewRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

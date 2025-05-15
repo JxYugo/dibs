@@ -403,6 +403,75 @@ class _CartWidgetState extends State<CartWidget> {
                                               ],
                                             ),
                                           ),
+                                          Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      16.0, 0.0, 16.0, 0.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Stack(
+                                                    children: [
+                                                      if (_model.isExpandable ??
+                                                          true)
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      8.0),
+                                                          child: Text(
+                                                            'This is the content that will be shown when the expandable section is open. You can add any information here that you want to be revealed when the user taps on the section title or the arrow icon. The container will automatically resize to fit this content when expanded.',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .roboto(
+                                                                    fontWeight: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontWeight,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .secondaryText,
+                                                                  fontSize:
+                                                                      12.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -502,7 +571,54 @@ class _CartWidgetState extends State<CartWidget> {
                       children: [
                         FFButtonWidget(
                           onPressed: () async {
-                            context.pushNamed(Checkout1Widget.routeName);
+                            _model.cartItemsListIndex = 0;
+                            safeSetState(() {});
+                            while (_model.cartItemsListIndex <
+                                cartCartRecordList.length) {
+                              _model.addToCartProductIDsList(cartCartRecordList
+                                  .elementAtOrNull(_model.cartItemsListIndex)!
+                                  .reference);
+                              safeSetState(() {});
+                              _model.cartItemsListIndex =
+                                  _model.cartItemsListIndex + 1;
+                              safeSetState(() {});
+                            }
+                            _model.cartItemsListIndex = 0;
+                            safeSetState(() {});
+
+                            context.pushNamed(
+                              Checkout1Widget.routeName,
+                              queryParameters: {
+                                'temporaryStoreCartIDsList': serializeParam(
+                                  _model.cartProductIDsList,
+                                  ParamType.DocumentReference,
+                                  isList: true,
+                                ),
+                                'temporarilyStoreTotalPrice': serializeParam(
+                                  functions.doubleSum(cartCartRecordList
+                                      .map((e) => e.price)
+                                      .toList()),
+                                  ParamType.double,
+                                ),
+                              }.withoutNulls,
+                            );
+
+                            _model.cartItemsListIndex = 0;
+                            safeSetState(() {});
+                            while (_model.cartItemsListIndex <=
+                                _model.cartProductIDsList.length) {
+                              _model.removeFromCartProductIDsList(
+                                  cartCartRecordList
+                                      .elementAtOrNull(
+                                          _model.cartItemsListIndex)!
+                                      .reference);
+                              safeSetState(() {});
+                              _model.cartItemsListIndex =
+                                  _model.cartItemsListIndex + 1;
+                              safeSetState(() {});
+                            }
+                            _model.cartItemsListIndex = 0;
+                            safeSetState(() {});
                           },
                           text: 'Checkout',
                           options: FFButtonOptions(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
+import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -15,33 +16,39 @@ class OrdersRecord extends FirestoreRecord {
     _initializeFields();
   }
 
-  // "product_id" field.
-  String? _productId;
-  String get productId => _productId ?? '';
-  bool hasProductId() => _productId != null;
-
-  // "address_id" field.
-  String? _addressId;
-  String get addressId => _addressId ?? '';
-  bool hasAddressId() => _addressId != null;
-
   // "payment_method" field.
   String? _paymentMethod;
   String get paymentMethod => _paymentMethod ?? '';
   bool hasPaymentMethod() => _paymentMethod != null;
 
-  // "vendor" field.
-  String? _vendor;
-  String get vendor => _vendor ?? '';
-  bool hasVendor() => _vendor != null;
+  // "cart_product_ids" field.
+  List<DocumentReference>? _cartProductIds;
+  List<DocumentReference> get cartProductIds => _cartProductIds ?? const [];
+  bool hasCartProductIds() => _cartProductIds != null;
+
+  // "address_id" field.
+  DocumentReference? _addressId;
+  DocumentReference? get addressId => _addressId;
+  bool hasAddressId() => _addressId != null;
+
+  // "total_price" field.
+  double? _totalPrice;
+  double get totalPrice => _totalPrice ?? 0.0;
+  bool hasTotalPrice() => _totalPrice != null;
+
+  // "time_ordered" field.
+  DateTime? _timeOrdered;
+  DateTime? get timeOrdered => _timeOrdered;
+  bool hasTimeOrdered() => _timeOrdered != null;
 
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
-    _productId = snapshotData['product_id'] as String?;
-    _addressId = snapshotData['address_id'] as String?;
     _paymentMethod = snapshotData['payment_method'] as String?;
-    _vendor = snapshotData['vendor'] as String?;
+    _cartProductIds = getDataList(snapshotData['cart_product_ids']);
+    _addressId = snapshotData['address_id'] as DocumentReference?;
+    _totalPrice = castToType<double>(snapshotData['total_price']);
+    _timeOrdered = snapshotData['time_ordered'] as DateTime?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -83,17 +90,17 @@ class OrdersRecord extends FirestoreRecord {
 }
 
 Map<String, dynamic> createOrdersRecordData({
-  String? productId,
-  String? addressId,
   String? paymentMethod,
-  String? vendor,
+  DocumentReference? addressId,
+  double? totalPrice,
+  DateTime? timeOrdered,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
-      'product_id': productId,
-      'address_id': addressId,
       'payment_method': paymentMethod,
-      'vendor': vendor,
+      'address_id': addressId,
+      'total_price': totalPrice,
+      'time_ordered': timeOrdered,
     }.withoutNulls,
   );
 
@@ -105,15 +112,22 @@ class OrdersRecordDocumentEquality implements Equality<OrdersRecord> {
 
   @override
   bool equals(OrdersRecord? e1, OrdersRecord? e2) {
-    return e1?.productId == e2?.productId &&
+    const listEquality = ListEquality();
+    return e1?.paymentMethod == e2?.paymentMethod &&
+        listEquality.equals(e1?.cartProductIds, e2?.cartProductIds) &&
         e1?.addressId == e2?.addressId &&
-        e1?.paymentMethod == e2?.paymentMethod &&
-        e1?.vendor == e2?.vendor;
+        e1?.totalPrice == e2?.totalPrice &&
+        e1?.timeOrdered == e2?.timeOrdered;
   }
 
   @override
-  int hash(OrdersRecord? e) => const ListEquality()
-      .hash([e?.productId, e?.addressId, e?.paymentMethod, e?.vendor]);
+  int hash(OrdersRecord? e) => const ListEquality().hash([
+        e?.paymentMethod,
+        e?.cartProductIds,
+        e?.addressId,
+        e?.totalPrice,
+        e?.timeOrdered
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is OrdersRecord;

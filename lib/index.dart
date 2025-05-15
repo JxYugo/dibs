@@ -4,7 +4,6 @@ export '/pages/authentication/signup/signup_widget.dart' show SignupWidget;
 export '/pages/app/app_widget.dart' show AppWidget;
 export '/pages/orders/bidding/bidding_widget.dart' show BiddingWidget;
 export '/pages/profile/favorites/favorites_widget.dart' show FavoritesWidget;
-export '/pages/profile/profile/profile_widget.dart' show ProfileWidget;
 export '/pages/profile/make_edits/change_profile_picture/change_profile_picture_widget.dart'
     show ChangeProfilePictureWidget;
 export '/pages/home/notification/notification_widget.dart'
@@ -36,10 +35,6 @@ export '/pages/orders/orderdetails/tracking_details/tracking_details_widget.dart
     show TrackingDetailsWidget;
 export '/pages/cart/checkout/add_address/add_address_widget.dart'
     show AddAddressWidget;
-export '/pages/cart/checkout/new_card_payment_method/new_card_payment_method_widget.dart'
-    show NewCardPaymentMethodWidget;
-export '/pages/cart/checkout/new_payment_method/new_payment_method_widget.dart'
-    show NewPaymentMethodWidget;
 export '/pages/profile/make_edits/change_password/change_password_widget.dart'
     show ChangePasswordWidget;
 export '/pages/orders/bids/bids_widget.dart' show BidsWidget;
@@ -63,9 +58,9 @@ export '/pages/details_for_products_for_sale/product_listing_for_bidding_sale/pr
     show ProductListingForBiddingSaleWidget;
 export '/pages/details_for_products_for_sale/product_listing_for_sale/product_listing_for_sale_widget.dart'
     show ProductListingForSaleWidget;
-export '/product_details_sell/product_details_sell_widget.dart'
+export '/pages/product/product_details_sell/product_details_sell_widget.dart'
     show ProductDetailsSellWidget;
-export '/product_details_bid/product_details_bid_widget.dart'
+export '/pages/product/product_details_bid/product_details_bid_widget.dart'
     show ProductDetailsBidWidget;
 export '/pages/product/product_detail_sell/product_detail_sell_widget.dart'
     show ProductDetailSellWidget;
@@ -73,3 +68,9 @@ export '/pages/product/product_detail_bid/product_detail_bid_widget.dart'
     show ProductDetailBidWidget;
 export '/new/seller_profile/seller_profile_widget.dart'
     show SellerProfileWidget;
+export '/pages/profile/profile/profile_widget.dart' show ProfileWidget;
+export '/new/verify_message/verify_message_widget.dart'
+    show VerifyMessageWidget;
+export '/pages/home/home_copy/home_copy_widget.dart' show HomeCopyWidget;
+export '/pages/home/home_copy_copy/home_copy_copy_widget.dart'
+    show HomeCopyCopyWidget;

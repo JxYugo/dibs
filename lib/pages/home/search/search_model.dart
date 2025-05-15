@@ -1,4 +1,4 @@
-import '/components/default_item/default_item_widget.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'search_widget.dart' show SearchWidget;
@@ -12,10 +12,7 @@ class SearchModel extends FlutterFlowModel<SearchWidget> {
   TextEditingController? searchTextfieldTextController;
   String? Function(BuildContext, String?)?
       searchTextfieldTextControllerValidator;
-  // Model for default_item component.
-  late DefaultItemModel defaultItemModel;
-  // State field(s) for RatingBar widget.
-  double? ratingBarValue1;
+  List<ProductsRecord> simpleSearchResults = [];
   // State field(s) for RatingBar widget.
   double? ratingBarValue2;
   // State field(s) for RatingBar widget.
@@ -24,6 +21,8 @@ class SearchModel extends FlutterFlowModel<SearchWidget> {
   double? ratingBarValue4;
   // State field(s) for RatingBar widget.
   double? ratingBarValue5;
+  // State field(s) for RatingBar widget.
+  double? ratingBarValue6;
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode1;
   TextEditingController? textController2;
@@ -60,16 +59,13 @@ class SearchModel extends FlutterFlowModel<SearchWidget> {
   bool? checkboxValue13;
 
   @override
-  void initState(BuildContext context) {
-    defaultItemModel = createModel(context, () => DefaultItemModel());
-  }
+  void initState(BuildContext context) {}
 
   @override
   void dispose() {
     searchTextfieldFocusNode?.dispose();
     searchTextfieldTextController?.dispose();
 
-    defaultItemModel.dispose();
     textFieldFocusNode1?.dispose();
     textController2?.dispose();
 
