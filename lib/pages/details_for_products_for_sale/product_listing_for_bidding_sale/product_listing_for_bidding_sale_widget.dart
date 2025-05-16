@@ -1253,6 +1253,37 @@ class _ProductListingForBiddingSaleWidgetState
                               Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 8.0),
+                                    child: Text(
+                                      dateTimeFormat(
+                                          "d/M h:mm a", _model.datePicked),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            font: GoogleFonts.roboto(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
                                   Align(
                                     alignment: AlignmentDirectional(0.0, 0.0),
                                     child: FFButtonWidget(
@@ -1261,7 +1292,8 @@ class _ProductListingForBiddingSaleWidgetState
                                             await showDatePicker(
                                           context: context,
                                           initialDate: getCurrentTimestamp,
-                                          firstDate: getCurrentTimestamp,
+                                          firstDate: (getCurrentTimestamp ??
+                                              DateTime(1900)),
                                           lastDate: DateTime(2050),
                                           builder: (context, child) {
                                             return wrapInMaterialDatePickerTheme(
@@ -1390,7 +1422,6 @@ class _ProductListingForBiddingSaleWidgetState
                                       sellerId:
                                           productListingForBiddingSaleUsersRecord
                                               .uid,
-                                      status: 'Open',
                                       condition: _model.selectQualityValue,
                                       stock: int.tryParse(
                                           _model.stockTextController.text),
@@ -1407,6 +1438,7 @@ class _ProductListingForBiddingSaleWidgetState
                                         true,
                                         true,
                                       ),
+                                      isBidOpen: true,
                                     ),
                                     ...mapToFirestore(
                                       {

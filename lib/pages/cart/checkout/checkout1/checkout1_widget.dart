@@ -15,15 +15,10 @@ export 'checkout1_model.dart';
 class Checkout1Widget extends StatefulWidget {
   const Checkout1Widget({
     super.key,
-    required this.temporaryStoreCartIDsList,
-    required this.temporarilyStoreTotalPrice,
+    required this.totalPrice,
   });
 
-  /// temporarily store cart IDs in a list
-  final List<DocumentReference>? temporaryStoreCartIDsList;
-
-  /// temporary store total price
-  final double? temporarilyStoreTotalPrice;
+  final double? totalPrice;
 
   static String routeName = 'checkout1';
   static String routePath = '/checkout1';
@@ -415,8 +410,6 @@ class _Checkout1WidgetState extends State<Checkout1Widget> {
                                       hoverColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
-                                        _model.selectedAddressRef = null;
-                                        safeSetState(() {});
                                         _model.selectedAddressRef =
                                             listViewAddressRecord.reference;
                                         safeSetState(() {});
@@ -463,18 +456,13 @@ class _Checkout1WidgetState extends State<Checkout1Widget> {
                       context.pushNamed(
                         Checkout2Widget.routeName,
                         queryParameters: {
-                          'address': serializeParam(
-                            _model.selectedAddressRef,
-                            ParamType.DocumentReference,
-                          ),
                           'totalPrice': serializeParam(
-                            widget.temporarilyStoreTotalPrice,
+                            widget.totalPrice,
                             ParamType.double,
                           ),
-                          'storeCartIDs': serializeParam(
-                            widget.temporaryStoreCartIDsList,
+                          'addressID': serializeParam(
+                            _model.selectedAddressRef,
                             ParamType.DocumentReference,
-                            isList: true,
                           ),
                         }.withoutNulls,
                       );

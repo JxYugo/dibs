@@ -179,7 +179,9 @@ class _AddressBookWidgetState extends State<AddressBookWidget> {
                           List<AddressRecord> listViewAddressRecordList =
                               snapshot.data!;
                           if (listViewAddressRecordList.isEmpty) {
-                            return NoItemsComponentWidget();
+                            return Center(
+                              child: NoItemsComponentWidget(),
+                            );
                           }
 
                           return ListView.separated(

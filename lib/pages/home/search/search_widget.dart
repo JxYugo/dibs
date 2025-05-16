@@ -7,8 +7,6 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:text_search/text_search.dart';
 import 'search_model.dart';
 export 'search_model.dart';
 
@@ -56,8 +54,6 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -1783,31 +1779,11 @@ class _SearchWidgetState extends State<SearchWidget> {
                             child: TextFormField(
                               controller: _model.searchTextfieldTextController,
                               focusNode: _model.searchTextfieldFocusNode,
-                              onFieldSubmitted: (_) async {
-                                await queryProductsRecordOnce()
-                                    .then(
-                                      (records) => _model.simpleSearchResults =
-                                          TextSearch(
-                                        records
-                                            .map(
-                                              (record) =>
-                                                  TextSearchItem.fromTerms(
-                                                      record, [record.name]),
-                                            )
-                                            .toList(),
-                                      )
-                                              .search(FFAppState().searched)
-                                              .map((r) => r.object)
-                                              .toList(),
-                                    )
-                                    .onError((_, __) =>
-                                        _model.simpleSearchResults = [])
-                                    .whenComplete(() => safeSetState(() {}));
-                              },
                               autofocus: false,
                               obscureText: false,
                               decoration: InputDecoration(
                                 isDense: true,
+                                labelText: 'Search',
                                 labelStyle: FlutterFlowTheme.of(context)
                                     .labelMedium
                                     .override(
@@ -1819,6 +1795,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                             .labelMedium
                                             .fontStyle,
                                       ),
+                                      fontSize: 16.0,
                                       letterSpacing: 0.0,
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .labelMedium
@@ -1827,7 +1804,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                                           .labelMedium
                                           .fontStyle,
                                     ),
-                                hintText: FFAppState().searched,
                                 hintStyle: FlutterFlowTheme.of(context)
                                     .labelMedium
                                     .override(
@@ -1839,6 +1815,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                             .labelMedium
                                             .fontStyle,
                                       ),
+                                      fontSize: 16.0,
                                       letterSpacing: 0.0,
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .labelMedium
@@ -1878,6 +1855,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                                 filled: true,
                                 fillColor: FlutterFlowTheme.of(context)
                                     .primaryBackground,
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  size: 24.0,
+                                ),
                               ),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -1890,6 +1871,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
+                                    fontSize: 16.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -1938,7 +1920,13 @@ class _SearchWidgetState extends State<SearchWidget> {
                           color: FlutterFlowTheme.of(context).primaryBackground,
                         ),
                         child: StreamBuilder<List<ProductsRecord>>(
-                          stream: queryProductsRecord(),
+                          stream: queryProductsRecord(
+                            queryBuilder: (productsRecord) =>
+                                productsRecord.where(
+                              'name',
+                              isEqualTo: widget.searched,
+                            ),
+                          ),
                           builder: (context, snapshot) {
                             // Customize what your widget looks like when it's loading.
                             if (!snapshot.hasData) {

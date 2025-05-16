@@ -484,44 +484,74 @@ class _ProductDetailsSellWidgetState extends State<ProductDetailsSellWidget> {
                                       24.0, 0.0, 24.0, 0.0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      await CartRecord.createDoc(
-                                              currentUserReference!)
-                                          .set({
-                                        ...createCartRecordData(
-                                          productName:
-                                              productDetailsSellProductsRecord
-                                                  .name,
-                                          price:
-                                              productDetailsSellProductsRecord
-                                                  .price,
-                                          vendor:
-                                              productDetailsSellProductsRecord
-                                                  .sellerId,
-                                          productId:
-                                              productDetailsSellProductsRecord
-                                                  .reference.id,
-                                        ),
-                                        ...mapToFirestore(
-                                          {
-                                            'added_at':
-                                                FieldValue.serverTimestamp(),
-                                            'product_images': [
-                                              productDetailsSellProductsRecord
-                                                  .images.firstOrNull
-                                            ],
-                                          },
-                                        ),
-                                      });
-
-                                      await productDetailsSellProductsRecord
-                                          .reference
-                                          .update({
-                                        ...mapToFirestore(
-                                          {
-                                            'stock': FieldValue.increment(-(1)),
-                                          },
-                                        ),
-                                      });
+                                      if (productDetailsSellProductsRecord
+                                              .stock >
+                                          0) {
+                                        await CartRecord.createDoc(
+                                                currentUserReference!)
+                                            .set({
+                                          ...createCartRecordData(
+                                            productId:
+                                                productDetailsSellProductsRecord
+                                                    .reference,
+                                            productName:
+                                                productDetailsSellProductsRecord
+                                                    .name,
+                                            price:
+                                                productDetailsSellProductsRecord
+                                                    .price,
+                                            vendor:
+                                                productDetailsSellProductsRecord
+                                                    .sellerId,
+                                            image:
+                                                productDetailsSellProductsRecord
+                                                    .images.firstOrNull,
+                                          ),
+                                          ...mapToFirestore(
+                                            {
+                                              'added_at':
+                                                  FieldValue.serverTimestamp(),
+                                            },
+                                          ),
+                                        });
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Item added to cart',
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
+                                            ),
+                                            duration:
+                                                Duration(milliseconds: 4000),
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondary,
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'No items left in stock',
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
+                                            ),
+                                            duration:
+                                                Duration(milliseconds: 4000),
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondary,
+                                          ),
+                                        );
+                                      }
                                     },
                                     text: 'Add to Cart',
                                     options: FFButtonOptions(

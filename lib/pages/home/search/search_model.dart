@@ -1,4 +1,3 @@
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'search_widget.dart' show SearchWidget;
@@ -12,7 +11,6 @@ class SearchModel extends FlutterFlowModel<SearchWidget> {
   TextEditingController? searchTextfieldTextController;
   String? Function(BuildContext, String?)?
       searchTextfieldTextControllerValidator;
-  List<ProductsRecord> simpleSearchResults = [];
   // State field(s) for RatingBar widget.
   double? ratingBarValue2;
   // State field(s) for RatingBar widget.

@@ -15,14 +15,12 @@ export 'checkout2_model.dart';
 class Checkout2Widget extends StatefulWidget {
   const Checkout2Widget({
     super.key,
-    required this.address,
     required this.totalPrice,
-    required this.storeCartIDs,
+    required this.addressID,
   });
 
-  final DocumentReference? address;
   final double? totalPrice;
-  final List<DocumentReference>? storeCartIDs;
+  final DocumentReference? addressID;
 
   static String routeName = 'checkout2';
   static String routePath = '/checkout2';
@@ -502,10 +500,7 @@ class _Checkout2WidgetState extends State<Checkout2Widget> {
                                         formatNumber(
                                           functions.totalPriceAfterShippingFee(
                                               widget.totalPrice!,
-                                              valueOrDefault<double>(
-                                                _model.deliveryFee,
-                                                25.0,
-                                              )),
+                                              _model.deliveryFee),
                                           formatType: FormatType.custom,
                                           currency: '₱',
                                           format: '#.##',
@@ -585,64 +580,132 @@ class _Checkout2WidgetState extends State<Checkout2Widget> {
                               ),
                             ),
                           ),
-                          FFButtonWidget(
-                            onPressed: () async {
-                              _model.paymentMethod = 'Credit Card';
-                              safeSetState(() {});
-
-                              await OrdersRecord.createDoc(
-                                      currentUserReference!)
-                                  .set({
-                                ...createOrdersRecordData(
-                                  paymentMethod: 'Credit Card',
-                                  addressId: widget.address,
-                                  totalPrice: widget.totalPrice,
-                                ),
-                                ...mapToFirestore(
-                                  {
-                                    'cart_product_ids': widget.storeCartIDs,
-                                    'time_ordered':
-                                        FieldValue.serverTimestamp(),
-                                  },
-                                ),
-                              });
-
-                              context.goNamed(Checkout3Widget.routeName);
-                            },
-                            text: 'Place your Order',
-                            options: FFButtonOptions(
-                              width: 300.0,
-                              height: 50.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 0.0, 16.0, 0.0),
-                              iconAlignment: IconAlignment.start,
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: Color(0xFF014063),
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    font: GoogleFonts.roboto(
-                                      fontWeight: FontWeight.normal,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.normal,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                  ),
-                              elevation: 0.0,
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(20.0),
-                                bottomRight: Radius.circular(20.0),
-                                topLeft: Radius.circular(20.0),
-                                topRight: Radius.circular(20.0),
-                              ),
+                          StreamBuilder<List<CartRecord>>(
+                            stream: queryCartRecord(
+                              parent: currentUserReference,
                             ),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        FlutterFlowTheme.of(context).primary,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              List<CartRecord> buttonCartRecordList =
+                                  snapshot.data!;
+
+                              return FFButtonWidget(
+                                onPressed: () async {
+                                  _model.indexCounter = 0;
+                                  safeSetState(() {});
+                                  while (_model.indexCounter <
+                                      buttonCartRecordList.length) {
+                                    await OrderedItemsRecord.createDoc(
+                                            currentUserReference!)
+                                        .set({
+                                      ...createOrderedItemsRecordData(
+                                        productId: buttonCartRecordList
+                                            .elementAtOrNull(
+                                                _model.indexCounter)
+                                            ?.productId,
+                                        productName: buttonCartRecordList
+                                            .elementAtOrNull(
+                                                _model.indexCounter)
+                                            ?.productName,
+                                        price: buttonCartRecordList
+                                            .elementAtOrNull(
+                                                _model.indexCounter)
+                                            ?.price,
+                                        vendor: buttonCartRecordList
+                                            .elementAtOrNull(
+                                                _model.indexCounter)
+                                            ?.vendor,
+                                        image: buttonCartRecordList
+                                            .elementAtOrNull(
+                                                _model.indexCounter)
+                                            ?.image,
+                                        addressSelected: widget.addressID,
+                                        paymentMethod: 'Credit Card',
+                                      ),
+                                      ...mapToFirestore(
+                                        {
+                                          'added_at':
+                                              FieldValue.serverTimestamp(),
+                                        },
+                                      ),
+                                    });
+                                    _model.updateStock =
+                                        await ProductsRecord.getDocumentOnce(
+                                            buttonCartRecordList
+                                                .elementAtOrNull(
+                                                    _model.indexCounter)!
+                                                .productId!);
+
+                                    await _model.updateStock!.reference.update({
+                                      ...mapToFirestore(
+                                        {
+                                          'stock': FieldValue.increment(-(1)),
+                                        },
+                                      ),
+                                    });
+                                    await buttonCartRecordList
+                                        .elementAtOrNull(_model.indexCounter)!
+                                        .reference
+                                        .delete();
+                                    _model.indexCounter =
+                                        _model.indexCounter + 1;
+                                    safeSetState(() {});
+                                  }
+
+                                  context.pushNamed(Checkout3Widget.routeName);
+
+                                  safeSetState(() {});
+                                },
+                                text: 'Place your Order',
+                                options: FFButtonOptions(
+                                  width: 300.0,
+                                  height: 50.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      16.0, 0.0, 16.0, 0.0),
+                                  iconAlignment: IconAlignment.start,
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: Color(0xFF014063),
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        font: GoogleFonts.roboto(
+                                          fontWeight: FontWeight.normal,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontStyle,
+                                        ),
+                                        color: Colors.white,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.normal,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontStyle,
+                                      ),
+                                  elevation: 0.0,
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20.0),
+                                    bottomRight: Radius.circular(20.0),
+                                    topLeft: Radius.circular(20.0),
+                                    topRight: Radius.circular(20.0),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ].divide(SizedBox(height: 15.0)),
                       ),
@@ -670,81 +733,54 @@ class _Checkout2WidgetState extends State<Checkout2Widget> {
                           ),
                         ],
                       ),
-                      InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          _model.paymentMethod = 'Cash on Delivery';
-                          safeSetState(() {});
-
-                          await OrdersRecord.createDoc(currentUserReference!)
-                              .set({
-                            ...createOrdersRecordData(
-                              paymentMethod: 'Credit Card',
-                              addressId: widget.address,
-                              totalPrice: widget.totalPrice,
-                            ),
-                            ...mapToFirestore(
-                              {
-                                'cart_product_ids': widget.storeCartIDs,
-                                'time_ordered': FieldValue.serverTimestamp(),
-                              },
-                            ),
-                          });
-
-                          context.goNamed(Checkout3Widget.routeName);
-                        },
-                        child: Container(
-                          width: 100.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            borderRadius: BorderRadius.circular(16.0),
-                            border: Border.all(
-                              color: FlutterFlowTheme.of(context).alternate,
-                            ),
+                      Container(
+                        width: 100.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(16.0),
+                          border: Border.all(
+                            color: FlutterFlowTheme.of(context).alternate,
                           ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                15.0, 15.0, 15.0, 15.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 3.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Text(
-                                        'Cash on Delivery',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.roboto(
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                              fontSize: 16.0,
-                                              letterSpacing: 0.0,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              15.0, 15.0, 15.0, 15.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 3.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Cash on Delivery',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            font: GoogleFonts.roboto(
                                               fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
-                                      ),
-                                    ].divide(SizedBox(width: 10.0)),
-                                  ),
+                                            fontSize: 16.0,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w600,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ].divide(SizedBox(width: 10.0)),
                                 ),
-                              ].divide(SizedBox(height: 2.0)),
-                            ),
+                              ),
+                            ].divide(SizedBox(height: 2.0)),
                           ),
                         ),
                       ),

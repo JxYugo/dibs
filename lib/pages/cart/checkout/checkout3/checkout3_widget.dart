@@ -1,4 +1,3 @@
-import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -51,18 +50,6 @@ class _Checkout3WidgetState extends State<Checkout3Widget> {
           child: AppBar(
             backgroundColor: Color(0xFF014063),
             automaticallyImplyLeading: false,
-            leading: FlutterFlowIconButton(
-              borderRadius: 100.0,
-              buttonSize: 40.0,
-              icon: Icon(
-                Icons.arrow_back_ios_rounded,
-                color: Colors.white,
-                size: 24.0,
-              ),
-              onPressed: () async {
-                context.safePop();
-              },
-            ),
             title: Text(
               'Checkout (3/3)',
               style: FlutterFlowTheme.of(context).bodyMedium.override(

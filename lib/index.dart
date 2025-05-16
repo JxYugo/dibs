@@ -38,8 +38,7 @@ export '/pages/cart/checkout/add_address/add_address_widget.dart'
 export '/pages/profile/make_edits/change_password/change_password_widget.dart'
     show ChangePasswordWidget;
 export '/pages/orders/bids/bids_widget.dart' show BidsWidget;
-export '/pages/profile/order_process/returned/returned_widget.dart'
-    show ReturnedWidget;
+export '/pages/profile/returned/returned_widget.dart' show ReturnedWidget;
 export '/pages/cart/checkout/edit_address/edit_address_widget.dart'
     show EditAddressWidget;
 export '/pages/home/categories/categories_widget.dart' show CategoriesWidget;
@@ -71,6 +70,3 @@ export '/new/seller_profile/seller_profile_widget.dart'
 export '/pages/profile/profile/profile_widget.dart' show ProfileWidget;
 export '/new/verify_message/verify_message_widget.dart'
     show VerifyMessageWidget;
-export '/pages/home/home_copy/home_copy_widget.dart' show HomeCopyWidget;
-export '/pages/home/home_copy_copy/home_copy_copy_widget.dart'
-    show HomeCopyCopyWidget;

@@ -9,11 +9,11 @@ import 'schema/users_record.dart';
 import 'schema/products_record.dart';
 import 'schema/cart_record.dart';
 import 'schema/address_record.dart';
-import 'schema/orders_record.dart';
-import 'schema/bids_won_record.dart';
 import 'schema/verified_details_record.dart';
 import 'schema/wishlist_record.dart';
 import 'schema/review_record.dart';
+import 'schema/ordered_items_record.dart';
+import 'schema/bids_made_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -26,11 +26,11 @@ export 'schema/users_record.dart';
 export 'schema/products_record.dart';
 export 'schema/cart_record.dart';
 export 'schema/address_record.dart';
-export 'schema/orders_record.dart';
-export 'schema/bids_won_record.dart';
 export 'schema/verified_details_record.dart';
 export 'schema/wishlist_record.dart';
 export 'schema/review_record.dart';
+export 'schema/ordered_items_record.dart';
+export 'schema/bids_made_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -186,86 +186,6 @@ Future<List<AddressRecord>> queryAddressRecordOnce({
       singleRecord: singleRecord,
     );
 
-/// Functions to query OrdersRecords (as a Stream and as a Future).
-Future<int> queryOrdersRecordCount({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      OrdersRecord.collection(parent),
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<OrdersRecord>> queryOrdersRecord({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      OrdersRecord.collection(parent),
-      OrdersRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<OrdersRecord>> queryOrdersRecordOnce({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      OrdersRecord.collection(parent),
-      OrdersRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-/// Functions to query BidsWonRecords (as a Stream and as a Future).
-Future<int> queryBidsWonRecordCount({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      BidsWonRecord.collection(parent),
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<BidsWonRecord>> queryBidsWonRecord({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      BidsWonRecord.collection(parent),
-      BidsWonRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<BidsWonRecord>> queryBidsWonRecordOnce({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      BidsWonRecord.collection(parent),
-      BidsWonRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
 /// Functions to query VerifiedDetailsRecords (as a Stream and as a Future).
 Future<int> queryVerifiedDetailsRecordCount({
   DocumentReference? parent,
@@ -378,6 +298,86 @@ Future<List<ReviewRecord>> queryReviewRecordOnce({
     queryCollectionOnce(
       ReviewRecord.collection,
       ReviewRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query OrderedItemsRecords (as a Stream and as a Future).
+Future<int> queryOrderedItemsRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      OrderedItemsRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<OrderedItemsRecord>> queryOrderedItemsRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      OrderedItemsRecord.collection(parent),
+      OrderedItemsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<OrderedItemsRecord>> queryOrderedItemsRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      OrderedItemsRecord.collection(parent),
+      OrderedItemsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query BidsMadeRecords (as a Stream and as a Future).
+Future<int> queryBidsMadeRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      BidsMadeRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<BidsMadeRecord>> queryBidsMadeRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      BidsMadeRecord.collection(parent),
+      BidsMadeRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<BidsMadeRecord>> queryBidsMadeRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      BidsMadeRecord.collection(parent),
+      BidsMadeRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

@@ -164,14 +164,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: Checkout1Widget.routeName,
           path: Checkout1Widget.routePath,
           builder: (context, params) => Checkout1Widget(
-            temporaryStoreCartIDsList: params.getParam<DocumentReference>(
-              'temporaryStoreCartIDsList',
-              ParamType.DocumentReference,
-              isList: true,
-              collectionNamePath: ['users', 'cart'],
-            ),
-            temporarilyStoreTotalPrice: params.getParam(
-              'temporarilyStoreTotalPrice',
+            totalPrice: params.getParam(
+              'totalPrice',
               ParamType.double,
             ),
           ),
@@ -185,21 +179,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: Checkout2Widget.routeName,
           path: Checkout2Widget.routePath,
           builder: (context, params) => Checkout2Widget(
-            address: params.getParam(
-              'address',
-              ParamType.DocumentReference,
-              isList: false,
-              collectionNamePath: ['users', 'address'],
-            ),
             totalPrice: params.getParam(
               'totalPrice',
               ParamType.double,
             ),
-            storeCartIDs: params.getParam<DocumentReference>(
-              'storeCartIDs',
+            addressID: params.getParam(
+              'addressID',
               ParamType.DocumentReference,
-              isList: true,
-              collectionNamePath: ['users', 'cart'],
+              isList: false,
+              collectionNamePath: ['users', 'address'],
             ),
           ),
         ),
@@ -211,7 +199,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               'orderRef',
               ParamType.DocumentReference,
               isList: false,
-              collectionNamePath: ['users', 'orders'],
+              collectionNamePath: ['users', 'ordered_items'],
             ),
           ),
         ),
@@ -362,16 +350,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: VerifyMessageWidget.routeName,
           path: VerifyMessageWidget.routePath,
           builder: (context, params) => VerifyMessageWidget(),
-        ),
-        FFRoute(
-          name: HomeCopyWidget.routeName,
-          path: HomeCopyWidget.routePath,
-          builder: (context, params) => HomeCopyWidget(),
-        ),
-        FFRoute(
-          name: HomeCopyCopyWidget.routeName,
-          path: HomeCopyCopyWidget.routePath,
-          builder: (context, params) => HomeCopyCopyWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

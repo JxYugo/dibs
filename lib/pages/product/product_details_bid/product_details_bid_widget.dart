@@ -649,113 +649,303 @@ class _ProductDetailsBidWidgetState extends State<ProductDetailsBidWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       24.0, 0.0, 24.0, 0.0),
-                                  child: FFButtonWidget(
-                                    onPressed: () async {
-                                      _model.bidAmount = double.parse(
-                                          _model.textController.text);
-                                      safeSetState(() {});
-                                      if ((productDetailsBidProductsRecord
-                                                  .currentBid >
-                                              _model.bidAmount) ||
-                                          (productDetailsBidProductsRecord
-                                                  .price <
-                                              _model.bidAmount) ||
-                                          (productDetailsBidProductsRecord
-                                                  .currentBid ==
-                                              _model.bidAmount)) {
-                                        if (productDetailsBidProductsRecord
-                                                .price ==
-                                            _model.bidAmount) {
-                                          await BidsWonRecord.createDoc(
-                                                  currentUserReference!)
-                                              .set({
-                                            ...createBidsWonRecordData(
-                                              productName:
-                                                  productDetailsBidProductsRecord
-                                                      .name,
-                                              price:
-                                                  productDetailsBidProductsRecord
-                                                      .price,
-                                              vendor:
-                                                  productDetailsBidProductsRecord
-                                                      .sellerId,
-                                            ),
-                                            ...mapToFirestore(
-                                              {
-                                                'added_at': FieldValue
-                                                    .serverTimestamp(),
-                                                'product_images': [
-                                                  productDetailsBidProductsRecord
-                                                      .images.firstOrNull
-                                                ],
-                                              },
-                                            ),
-                                          });
-
-                                          context.pushNamed(
-                                              BiddingWidget.routeName);
-                                        } else {
-                                          await widget.productReference!
-                                              .update(createProductsRecordData(
-                                            currentBidder: valueOrDefault(
-                                                currentUserDocument?.fullname,
-                                                ''),
-                                            currentBid: double.tryParse(
-                                                _model.textController.text),
-                                          ));
-
-                                          context.pushNamed(
-                                              BiddingWidget.routeName);
-                                        }
-                                      } else {
-                                        await widget.productReference!
-                                            .update(createProductsRecordData(
-                                          currentBidder: valueOrDefault(
-                                              currentUserDocument?.fullname,
-                                              ''),
-                                          currentBid: double.tryParse(
-                                              _model.textController.text),
-                                        ));
-
-                                        context
-                                            .pushNamed(BiddingWidget.routeName);
-                                      }
-                                    },
-                                    text: 'Add Offer',
-                                    options: FFButtonOptions(
-                                      width: double.infinity,
-                                      height: 50.0,
-                                      padding: EdgeInsets.all(8.0),
-                                      iconPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
-                                            font: GoogleFonts.roboto(
-                                              fontWeight: FontWeight.w600,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmall
-                                                      .fontStyle,
-                                            ),
-                                            color: Colors.white,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .fontStyle,
-                                          ),
-                                      elevation: 0.0,
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1.0,
+                                  child: StreamBuilder<List<BidsMadeRecord>>(
+                                    stream: queryBidsMadeRecord(
+                                      parent: currentUserReference,
+                                      queryBuilder: (bidsMadeRecord) =>
+                                          bidsMadeRecord.where(
+                                        'isBidWon',
+                                        isEqualTo: false,
                                       ),
-                                      borderRadius: BorderRadius.circular(12.0),
                                     ),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      List<BidsMadeRecord>
+                                          buttonBidsMadeRecordList =
+                                          snapshot.data!;
+
+                                      return FFButtonWidget(
+                                        onPressed: () async {
+                                          var _shouldSetState = false;
+                                          if (productDetailsBidProductsRecord
+                                                  .isBidOpen ==
+                                              true) {
+                                            _model.bidAmount = double.parse(
+                                                _model.textController.text);
+                                            safeSetState(() {});
+                                            if ((productDetailsBidProductsRecord
+                                                        .currentBid >
+                                                    _model.bidAmount) ||
+                                                (productDetailsBidProductsRecord
+                                                        .price <
+                                                    _model.bidAmount) ||
+                                                (productDetailsBidProductsRecord
+                                                        .currentBid ==
+                                                    _model.bidAmount) ||
+                                                (productDetailsBidProductsRecord
+                                                        .price ==
+                                                    _model.bidAmount)) {
+                                              if (productDetailsBidProductsRecord
+                                                      .price ==
+                                                  _model.bidAmount) {
+                                                if (buttonBidsMadeRecordList
+                                                        .length >
+                                                    0) {
+                                                  _model.indexCounter = 0;
+                                                  safeSetState(() {});
+                                                  while (_model.indexCounter <
+                                                      buttonBidsMadeRecordList
+                                                          .length) {
+                                                    _model.productDinBidsMade2 =
+                                                        await ProductsRecord.getDocumentOnce(
+                                                            buttonBidsMadeRecordList
+                                                                .elementAtOrNull(
+                                                                    _model
+                                                                        .indexCounter)!
+                                                                .productId!);
+                                                    _shouldSetState = true;
+                                                    if (widget.productReference
+                                                            ?.id ==
+                                                        _model
+                                                            .productDinBidsMade2
+                                                            ?.reference
+                                                            .id) {
+                                                      await widget
+                                                          .productReference!
+                                                          .update(
+                                                              createProductsRecordData(
+                                                        currentBid: double
+                                                            .tryParse(_model
+                                                                .textController
+                                                                .text),
+                                                        currentBidder:
+                                                            valueOrDefault(
+                                                                currentUserDocument
+                                                                    ?.fullname,
+                                                                ''),
+                                                        isBidOpen: false,
+                                                      ));
+
+                                                      await buttonBidsMadeRecordList
+                                                          .elementAtOrNull(_model
+                                                              .indexCounter)!
+                                                          .reference
+                                                          .update(
+                                                              createBidsMadeRecordData(
+                                                            isBidWon: true,
+                                                          ));
+
+                                                      context.goNamed(
+                                                          BiddingWidget
+                                                              .routeName);
+
+                                                      if (_shouldSetState)
+                                                        safeSetState(() {});
+                                                      return;
+                                                    }
+                                                    _model.indexCounter =
+                                                        _model.indexCounter + 1;
+                                                    safeSetState(() {});
+                                                  }
+                                                }
+
+                                                await BidsMadeRecord.createDoc(
+                                                        currentUserReference!)
+                                                    .set(
+                                                        createBidsMadeRecordData(
+                                                  productId:
+                                                      widget.productReference,
+                                                  isBidWon: true,
+                                                ));
+
+                                                await widget.productReference!
+                                                    .update(
+                                                        createProductsRecordData(
+                                                  currentBid: double.tryParse(
+                                                      _model
+                                                          .textController.text),
+                                                  currentBidder: valueOrDefault(
+                                                      currentUserDocument
+                                                          ?.fullname,
+                                                      ''),
+                                                  isBidOpen: false,
+                                                ));
+
+                                                context.goNamed(
+                                                    BiddingWidget.routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      'Invalid Bid Amount',
+                                                      style: TextStyle(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                      ),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                    backgroundColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .secondary,
+                                                  ),
+                                                );
+                                              }
+                                            } else {
+                                              if (buttonBidsMadeRecordList
+                                                      .length >
+                                                  0) {
+                                                _model.indexCounter = 0;
+                                                safeSetState(() {});
+                                                while (_model.indexCounter <
+                                                    buttonBidsMadeRecordList
+                                                        .length) {
+                                                  _model.productDinBidsMade =
+                                                      await ProductsRecord.getDocumentOnce(
+                                                          buttonBidsMadeRecordList
+                                                              .elementAtOrNull(
+                                                                  _model
+                                                                      .indexCounter)!
+                                                              .productId!);
+                                                  _shouldSetState = true;
+                                                  if (widget.productReference
+                                                          ?.id ==
+                                                      _model.productDinBidsMade
+                                                          ?.reference.id) {
+                                                    await widget
+                                                        .productReference!
+                                                        .update(
+                                                            createProductsRecordData(
+                                                      currentBid:
+                                                          double.tryParse(_model
+                                                              .textController
+                                                              .text),
+                                                      currentBidder:
+                                                          valueOrDefault(
+                                                              currentUserDocument
+                                                                  ?.fullname,
+                                                              ''),
+                                                    ));
+
+                                                    context.goNamed(
+                                                        BiddingWidget
+                                                            .routeName);
+
+                                                    if (_shouldSetState)
+                                                      safeSetState(() {});
+                                                    return;
+                                                  }
+                                                  _model.indexCounter =
+                                                      _model.indexCounter + 1;
+                                                  safeSetState(() {});
+                                                }
+                                              }
+
+                                              await BidsMadeRecord.createDoc(
+                                                      currentUserReference!)
+                                                  .set(createBidsMadeRecordData(
+                                                productId:
+                                                    widget.productReference,
+                                                isBidWon: false,
+                                              ));
+
+                                              await widget.productReference!
+                                                  .update(
+                                                      createProductsRecordData(
+                                                currentBid: double.tryParse(
+                                                    _model.textController.text),
+                                                currentBidder: valueOrDefault(
+                                                    currentUserDocument
+                                                        ?.fullname,
+                                                    ''),
+                                              ));
+
+                                              context.goNamed(
+                                                  BiddingWidget.routeName);
+                                            }
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Bid is closed',
+                                                  style: TextStyle(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                  ),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                                backgroundColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondary,
+                                              ),
+                                            );
+                                          }
+
+                                          if (_shouldSetState)
+                                            safeSetState(() {});
+                                        },
+                                        text: 'Add Offer',
+                                        options: FFButtonOptions(
+                                          width: double.infinity,
+                                          height: 50.0,
+                                          padding: EdgeInsets.all(8.0),
+                                          iconPadding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 0.0, 0.0),
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          textStyle: FlutterFlowTheme.of(
+                                                  context)
+                                              .titleSmall
+                                              .override(
+                                                font: GoogleFonts.roboto(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .fontStyle,
+                                                ),
+                                                color: Colors.white,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
+                                          elevation: 0.0,
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                                 Row(

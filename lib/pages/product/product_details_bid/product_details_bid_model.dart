@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -9,6 +10,8 @@ class ProductDetailsBidModel extends FlutterFlowModel<ProductDetailsBidWidget> {
 
   double bidAmount = 0.0;
 
+  int indexCounter = 0;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for Carousel widget.
@@ -19,6 +22,10 @@ class ProductDetailsBidModel extends FlutterFlowModel<ProductDetailsBidWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  // Stores action output result for [Backend Call - Read Document] action in Button widget.
+  ProductsRecord? productDinBidsMade2;
+  // Stores action output result for [Backend Call - Read Document] action in Button widget.
+  ProductsRecord? productDinBidsMade;
 
   @override
   void initState(BuildContext context) {}

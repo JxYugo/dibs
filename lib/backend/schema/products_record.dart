@@ -71,11 +71,6 @@ class ProductsRecord extends FirestoreRecord {
   String get buyerId => _buyerId ?? '';
   bool hasBuyerId() => _buyerId != null;
 
-  // "status" field.
-  String? _status;
-  String get status => _status ?? '';
-  bool hasStatus() => _status != null;
-
   // "payment_method" field.
   String? _paymentMethod;
   String get paymentMethod => _paymentMethod ?? '';
@@ -126,6 +121,11 @@ class ProductsRecord extends FirestoreRecord {
   String get productId => _productId ?? '';
   bool hasProductId() => _productId != null;
 
+  // "isBidOpen" field.
+  bool? _isBidOpen;
+  bool get isBidOpen => _isBidOpen ?? false;
+  bool hasIsBidOpen() => _isBidOpen != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _description = snapshotData['description'] as String?;
@@ -138,7 +138,6 @@ class ProductsRecord extends FirestoreRecord {
     _currentBid = castToType<double>(snapshotData['current_bid']);
     _sellerId = snapshotData['seller_id'] as String?;
     _buyerId = snapshotData['buyer_id'] as String?;
-    _status = snapshotData['status'] as String?;
     _paymentMethod = snapshotData['payment_method'] as String?;
     _endTime = snapshotData['end_time'] as DateTime?;
     _timeLeft = snapshotData['time_left'] as DateTime?;
@@ -149,6 +148,7 @@ class ProductsRecord extends FirestoreRecord {
     _currentBidder = snapshotData['current_bidder'] as String?;
     _category = snapshotData['category'] as String?;
     _productId = snapshotData['product_id'] as String?;
+    _isBidOpen = snapshotData['isBidOpen'] as bool?;
   }
 
   static CollectionReference get collection =>
@@ -196,7 +196,6 @@ Map<String, dynamic> createProductsRecordData({
   double? currentBid,
   String? sellerId,
   String? buyerId,
-  String? status,
   String? paymentMethod,
   DateTime? endTime,
   DateTime? timeLeft,
@@ -207,6 +206,7 @@ Map<String, dynamic> createProductsRecordData({
   String? currentBidder,
   String? category,
   String? productId,
+  bool? isBidOpen,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -220,7 +220,6 @@ Map<String, dynamic> createProductsRecordData({
       'current_bid': currentBid,
       'seller_id': sellerId,
       'buyer_id': buyerId,
-      'status': status,
       'payment_method': paymentMethod,
       'end_time': endTime,
       'time_left': timeLeft,
@@ -231,6 +230,7 @@ Map<String, dynamic> createProductsRecordData({
       'current_bidder': currentBidder,
       'category': category,
       'product_id': productId,
+      'isBidOpen': isBidOpen,
     }.withoutNulls,
   );
 
@@ -254,7 +254,6 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e1?.currentBid == e2?.currentBid &&
         e1?.sellerId == e2?.sellerId &&
         e1?.buyerId == e2?.buyerId &&
-        e1?.status == e2?.status &&
         e1?.paymentMethod == e2?.paymentMethod &&
         e1?.endTime == e2?.endTime &&
         e1?.timeLeft == e2?.timeLeft &&
@@ -264,7 +263,8 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e1?.isBidding == e2?.isBidding &&
         e1?.currentBidder == e2?.currentBidder &&
         e1?.category == e2?.category &&
-        e1?.productId == e2?.productId;
+        e1?.productId == e2?.productId &&
+        e1?.isBidOpen == e2?.isBidOpen;
   }
 
   @override
@@ -280,7 +280,6 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e?.currentBid,
         e?.sellerId,
         e?.buyerId,
-        e?.status,
         e?.paymentMethod,
         e?.endTime,
         e?.timeLeft,
@@ -290,7 +289,8 @@ class ProductsRecordDocumentEquality implements Equality<ProductsRecord> {
         e?.isBidding,
         e?.currentBidder,
         e?.category,
-        e?.productId
+        e?.productId,
+        e?.isBidOpen
       ]);
 
   @override

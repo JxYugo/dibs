@@ -152,8 +152,10 @@ class _BiddingWidgetState extends State<BiddingWidget> {
               Align(
                 alignment: AlignmentDirectional(0.0, 0.0),
                 child: FFButtonWidget(
-                  onPressed: () async {},
-                  text: 'Check bid status',
+                  onPressed: () async {
+                    context.pushNamed(BidsWidget.routeName);
+                  },
+                  text: 'Check Bid Status',
                   options: FFButtonOptions(
                     width: 300.0,
                     height: 50.0,
@@ -161,21 +163,24 @@ class _BiddingWidgetState extends State<BiddingWidget> {
                         EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                     iconPadding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: Color(0xFF014063),
+                    color: FlutterFlowTheme.of(context).primary,
                     textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                           font: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                             fontStyle: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .fontStyle,
                           ),
-                          color: Colors.white,
+                          color: FlutterFlowTheme.of(context).primaryBackground,
                           letterSpacing: 0.0,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                           fontStyle:
                               FlutterFlowTheme.of(context).titleSmall.fontStyle,
                         ),
                     elevation: 0.0,
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).primary,
+                    ),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),

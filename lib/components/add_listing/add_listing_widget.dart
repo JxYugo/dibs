@@ -116,7 +116,7 @@ class _AddListingWidgetState extends State<AddListingWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Buy Now Item',
+                                'List item for Selling',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyLarge
                                     .override(
@@ -187,7 +187,7 @@ class _AddListingWidgetState extends State<AddListingWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Bidding',
+                                'List item for Bidding',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyLarge
                                     .override(
